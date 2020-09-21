@@ -1,0 +1,120 @@
+@mixin positionElementsSearch {
+    position: absolute;
+    top: 193px;
+    left: 115px;
+}
+
+.contacts--div {
+    height: 191px;
+    h2 {
+        margin: 40px 0px 20px 140px;
+    }
+    .contacts--div--elements {
+        width: 1366px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        input {
+            width: 502px;
+            height: 36px;
+            border-radius: 5px;
+        }
+    }
+    i {
+        padding: .4rem .75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: .25rem;
+        cursor: pointer;
+    }
+}
+
+.contacts--div--table {
+    margin: 0 25px;
+    display: grid;
+    grid-template-columns: 54px 250px 186px 186px 186px 184px 186px 82px;
+    grid-template-rows: 56px;
+    align-items: center;
+    text-align: center;
+    input {
+        margin: 0 auto;
+    }
+    span {
+        cursor: pointer;
+    }
+    span:nth-child(6) {
+        cursor: unset;
+    }
+}
+
+.contacts--div--searchDropDown {
+    @include positionElementsSearch();
+    width: 503px;
+    height: 375px;
+    background: #fff;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 10px;
+    .contacts--div--searchDropDown-direction {
+        width: 100%;
+        display: flex;
+        justify-content: start;
+        p {
+            width: 152px;
+            margin-left: 17px;
+            margin: 0 15px 0 17px;
+        }
+        input {
+            width: 312px;
+            border: none;
+            border-bottom: 1px solid #808080;
+        }
+        .btn {
+            width: 190px;
+        }
+    }
+}
+
+.contacts--div--suggest {
+    @include positionElementsSearch();
+    input {
+        width: 502px;
+        height: 36px;
+        border-radius: 5px;
+    }
+}
+
+.contacts--div--filterSearch {
+    @include positionElementsSearch();
+    display: flex;
+    flex-wrap: wrap;
+    width: 500px;
+    .contacts--div--filterSearch-filter {
+        padding: 5px;
+        margin: 5px;
+        background: rgba(0, 0, 0, 0.05);
+        span {
+            border-radius: 4px;
+            height: 24px;
+            padding: 5px;
+        }
+    }
+}
+
+.contacts--div--selectionContacts {
+    position: absolute;
+    top: 248px;
+    left: 22px;
+    display: flex;
+    justify-content: space-between;
+    width: 1317px;
+    p {
+        margin: 0 0 0 5px;
+    }
+    .contacts--div--selectionContacts-delete {
+        display: flex;
+        align-items: center;
+    }
+}

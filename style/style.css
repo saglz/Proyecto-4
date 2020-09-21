@@ -1,0 +1,185 @@
+.border-color {
+  border: 1px solid #CCCCCC;
+}
+
+.hidden {
+  display: none;
+}
+
+.navFlex {
+  /* display: flex; */
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  width: 1366px;
+}
+
+.contacts--div {
+  height: 191px;
+}
+
+.contacts--div h2 {
+  margin: 40px 0px 20px 140px;
+}
+
+.contacts--div .contacts--div--elements {
+  width: 1366px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.contacts--div .contacts--div--elements input {
+  width: 502px;
+  height: 36px;
+  border-radius: 5px;
+}
+
+.contacts--div i {
+  padding: .4rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+  cursor: pointer;
+}
+
+.contacts--div--table {
+  margin: 0 25px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 54px 250px 186px 186px 186px 184px 186px 82px;
+      grid-template-columns: 54px 250px 186px 186px 186px 184px 186px 82px;
+  -ms-grid-rows: 56px;
+      grid-template-rows: 56px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+}
+
+.contacts--div--table input {
+  margin: 0 auto;
+}
+
+.contacts--div--table span {
+  cursor: pointer;
+}
+
+.contacts--div--table span:nth-child(6) {
+  cursor: unset;
+}
+
+.contacts--div--searchDropDown {
+  position: absolute;
+  top: 193px;
+  left: 115px;
+  width: 503px;
+  height: 375px;
+  background: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  border-radius: 10px;
+}
+
+.contacts--div--searchDropDown .contacts--div--searchDropDown-direction {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: start;
+}
+
+.contacts--div--searchDropDown .contacts--div--searchDropDown-direction p {
+  width: 152px;
+  margin-left: 17px;
+  margin: 0 15px 0 17px;
+}
+
+.contacts--div--searchDropDown .contacts--div--searchDropDown-direction input {
+  width: 312px;
+  border: none;
+  border-bottom: 1px solid #808080;
+}
+
+.contacts--div--searchDropDown .contacts--div--searchDropDown-direction .btn {
+  width: 190px;
+}
+
+.contacts--div--suggest {
+  position: absolute;
+  top: 193px;
+  left: 115px;
+}
+
+.contacts--div--suggest input {
+  width: 502px;
+  height: 36px;
+  border-radius: 5px;
+}
+
+.contacts--div--filterSearch {
+  position: absolute;
+  top: 193px;
+  left: 115px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  width: 500px;
+}
+
+.contacts--div--filterSearch .contacts--div--filterSearch-filter {
+  padding: 5px;
+  margin: 5px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.contacts--div--filterSearch .contacts--div--filterSearch-filter span {
+  border-radius: 4px;
+  height: 24px;
+  padding: 5px;
+}
+
+.contacts--div--selectionContacts {
+  position: absolute;
+  top: 248px;
+  left: 22px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 1317px;
+}
+
+.contacts--div--selectionContacts p {
+  margin: 0 0 0 5px;
+}
+
+.contacts--div--selectionContacts .contacts--div--selectionContacts-delete {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+/*# sourceMappingURL=style.css.map */

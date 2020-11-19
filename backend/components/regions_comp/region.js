@@ -1,84 +1,45 @@
-const connMongoose = require('../../store/conexion');
+const sequelize = require('../../store/conexionMysql');
+const querys = require('../../store/querys');
+const response = require('../../network/response');
 
-const regCountCities = connMongoose.model('regCountCities', {
+/* ---------------------------------------------READ REGION -----------------------------------------------------*/
+const readRegion = async(req, res) => {
 
-    regions: {
-        nameReg: String,
-        countries: {
-            nameCount: String,
-            cities: {
-                nameCity: String
-            }
-        }
+    let readCont = await querys.selectAll(req, res, 'region');
+
+    if (!!readCont) {
+        response.success(req, res, { readCont }, 200);
+    } else {
+        response.error(req, res, 'Error leyendo los contactos', 400, 'Error leyendo contactos[getContacts]');
     }
+};
 
-});
+/* ---------------------------------------------READ COUNTRIES -----------------------------------------------------*/
+const readCountries = async(req, res) => {
+    const paramsId = req.params.id;
+    let readCont = await querys.selectDataById(req, res, 'countries AS c INNER JOIN region As r ON c.region_id = r.region_id', 'c.name', 'c.region_id', paramsId);
 
-const createRegCountCities = async(req, res, next) => {
-    let { nameReg, nameCount, nameCity } = req.body;
-    if (!nameReg || !nameCount || !nameCity) return res.status(400).json('parametros mal enviados');
-    /* searchCompany(req||! res, nit); */
-
-    let objAddReg = {
-        nameReg,
-        nameCount,
-        nameCity
+    if (!!readCont) {
+        response.success(req, res, { readCont }, 200);
+    } else {
+        response.error(req, res, 'Error leyendo los contactos', 400, 'Error leyendo contactos[getContacts]');
     }
-    const addRegCouCit = new regCountCities(objAddReg);
-    addRegCouCit.save();
-    res.status(200).json('Agregado');
-
 };
 
-const readRegCountCities = async(req, res, next) => {
-    regCountCities.find()
-        .then((result) => {
-            res.status(200).json({ result });
-        })
-        .catch((err) => {
-            console.error(err);
-        });
-};
+/* ---------------------------------------------READ CITIES -----------------------------------------------------*/
+const readCities = async(req, res) => {
+    const paramsId = req.params.id;
+    let readCont = await querys.selectDataById(req, res, 'cities AS ct INNER JOIN countries As c ON ct.countries_id = c.countries_id', 'ct.name', 'ct.countries_id', paramsId);
 
-const updateRegCountCities = async(req, res, next) => {
-    let { idU, fullName, email, position, userName, password } = req.body;
-    if (!idU || !fullName || !email || !position || !userName || !password) return res.status(400).json('parametros mal enviados');
-    regCountCities.findOne({ idU: idU })
-        .then((result) => {
-            if (result) {
-                result.idU = idU;
-                result.fullName = fullName;
-                result.email = email;
-                result.position = position;
-                result.userName = userName;
-                result.password = password;
-                result.save();
-                res.status(200).json('Actualización correcta');
-            } else {
-                return res.status(400).json('No se puede actualizar esta compañia');
-            }
-        })
-        .catch((err) => {
-            console.error(err);
-        });
-};
-
-const deleteRegCountCities = async(req, res, next) => {
-    let { idU } = req.body;
-    if (!idU) return res.status(400).json('parametros mal enviados');
-    regCountCities.deleteOne({ idU: idU })
-        .then((result) => {
-            console.log(result);
-            res.status(200).json('Contacto eliminado correctamente');
-        })
-        .catch((err) => {
-            console.error(err);
-        });
+    if (!!readCont) {
+        response.success(req, res, { readCont }, 200);
+    } else {
+        response.error(req, res, 'Error leyendo los contactos', 400, 'Error leyendo contactos[getContacts]');
+    }
 };
 
 module.exports = {
-    createRegCountCities,
-    readRegCountCities,
-    updateRegCountCities,
-    deleteRegCountCities
+    readRegion,
+    readCountries,
+    readCities
 }

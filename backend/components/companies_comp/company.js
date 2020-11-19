@@ -1,77 +1,68 @@
 const sequelize = require('../../store/conexionMysql');
+const querys = require('../../store/querys');
+const response = require('../../network/response');
 
+/* ---------------------------------------------CREATE COMPANY -----------------------------------------------------*/
 const createCompany = async(req, res) => {
-    let { id, name, lastName, email, position, channel, interest } = req.body;
-    if (!id || !name || !lastName || !email || !position || !channel || !interest) return res.status(400).json('parametros mal enviados');
-    //validar si ya existe un contacto con los mismo datos
-    await sequelize.query(`SELECT * FROM contacts WHERE id=${id}`, {
-            type: sequelize.QueryTypes.SELECT,
-        })
-        .then(result => {
-            if (result == "") {
-                sequelize.query(`INSERT INTO contacts (id,name, lastName,email,position,channel,interest,companies_id)
-                VALUES (${id},'${name}','${lastName}','${email}','${position}','${channel}',${interest},1)`)
-                    .then(response => {
-                        res.status(200).json('Número de contactos agregados: ' + response[1]);
-                    })
-                    .catch(err => {
-                        console.error(err);
-                    });
-            } else {
-                res.status(200).json('Ya existe un contacto');
-            }
-        })
+    let { nit, name, phone, email, address, cities_id } = req.body;
+
+    let alreadyExists = await querys.selectDataById(req, res, 'companies', 'nit', 'nit', nit);
+
+    if (!!alreadyExists) {
+        response.error(req, res, 'Ya existe una compañía con ese NIT', 200, 'Error ya existe el NIT[createCompany]');
+    } else {
+        let insert = await querys.insert(req, res, 'companies', 'nit, name, phone, email, address, cities_id', `${nit},'${name}',${phone},'${email}','${address}',${cities_id}`);
+        if (!!insert) {
+            response.success(req, res, 'Compañía creada con éxito', 201);
+        } else {
+            response.error(req, res, 'Error insertando compañía', 400, 'Error insertando[createCompany]');
+        }
+    }
 };
 
+/* ---------------------------------------------READ COMPANY -----------------------------------------------------*/
 const readCompany = async(req, res) => {
-    await sequelize.query(`SELECT * FROM contacts`, {
-            type: sequelize.QueryTypes.SELECT,
-        })
-        .then(result => {
-            if (result == "") {
-                res.status(404).json('No hay contactos');
-            } else {
-                res.status(200).json({ result });
-            }
-        })
-        .catch(err => {
-            console.error(err);
-        });
+
+    let readComp = await querys.selectAll(req, res, 'companies');
+
+    if (!!readComp) {
+        response.success(req, res, { readComp }, 200);
+    } else {
+        response.error(req, res, 'Error leyendo las compañias', 400, 'Error leyendo compañías[getCompany]');
+    }
 };
 
+/* ---------------------------------------------UPADATE COMPANY -----------------------------------------------------*/
 const updateCompany = async(req, res) => {
-    let { id, name, lastName, email, position, channel, interest } = req.body;
-    if (!id || !name || !lastName || !email || !position || !channel || !interest) return res.status(400).json('parametros mal enviados');
+    let { nit, name, phone, email, address, cities_id } = req.body;
 
-    await sequelize.query(`UPDATE contacts 
-    SET name='${name}',lastName='${lastName}',email='${email}',position='${position}',channel='${channel}',interest=${interest}
-    WHERE id=${id}`)
+    await sequelize.query(`UPDATE companies 
+    SET name='${name}',phone=${phone},email='${email}',address='${address}',cities_id=${cities_id}
+    WHERE nit=${nit}`)
         .then(result => {
             if (result[1] == 0) {
-                res.status(400).json('No pudo actualizar el contacto');
+                response.error(req, res, 'No se pudo actualizar la compañía', 400, 'Error update company[updateCompany]');
             } else {
-                res.status(200).json('Número de contactos actualizados: ' + result[0].affectedRows);
+                response.success(req, res, 'Número de contactos actualizados: ' + result[0].affectedRows, 200);
             }
         })
         .catch(err => {
-            console.error(err);
+            response.error(req, res, 'Error inesperado actualizando compañía', 400, err);
         });
 };
 
-const deleteCompany = async(req, res, next) => {
-    let { id } = req.body;
-    if (!id) return res.status(400).json('parametros mal enviados');
-    await sequelize.query(`DELETE FROM contacts WHERE id=${id}`)
-        .then(result => {
-            if (result[1] != 0) {
-                res.status(200).json(`Contacto eliminado por id: ${id}`);
-            } else {
-                res.status(406).json(`No se puede eliminar contacto`);
-            }
-        })
-        .catch((err) => {
-            console.error(err);
-        });
+/* ---------------------------------------------DELETE COMPANY -----------------------------------------------------*/
+const deleteCompany = async(req, res) => {
+    let { nit } = req.body;
+    if (!nit) return res.status(400).json('parametros mal enviados');
+
+    let deleteComp = await querys.delete(req, res, 'companies', 'nit', nit);
+
+    if (!!deleteComp) {
+        response.success(req, res, `Compañía eliminada por NIT: ${nit}`, 200);
+    } else {
+        response.error(req, res, 'No se puede eliminar compañía', 400, 'Error eliminando compañía[deleteCompany]');
+    }
 };
 
 module.exports = {

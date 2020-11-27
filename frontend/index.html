@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <!-- CSS Propio-->
     <link rel="stylesheet" href="style/style.css">
-
+    <!-- Main CSS-->
+    <link href="style/main.css" rel="stylesheet" media="all">
     <title>Proyecto 4</title>
 </head>
 
@@ -26,16 +27,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Contactos</a>
+                        <a id="btnContacts" class="nav-link" href="#contacts">Contactos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Compañía</a>
+                        <a id="btnCompanies" class="nav-link" href="#companies">Compañía</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Usuarios</a>
+                        <a id="btnUsers" class="nav-link" href="#users">Usuarios</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Región/Ciudad</a>
+                        <a id="btnRegion" class="nav-link" href="#regionCity">Región/Ciudad</a>
                     </li>
                 </ul>
             </div>
@@ -43,8 +44,9 @@
     </header>
     <main>
 
-        <!-- Contacts -->
-        <section id="contacts" class="">
+        <!-- *************************************************************CONTACTS**************************************** -->
+        <section id="contacts" class="hidden">
+            <!-- bg-gra-01 -->
             <div class="contacts--div">
                 <h2>Contactos</h2>
                 <div class="contacts--div--elements">
@@ -176,7 +178,7 @@
                 <p>Todos los filtrados</p>
             </div>
 
-            <div class="contacts--div--popUps hidden">
+            <div class="hidden">
                 <!-- contacts--div--popUps -->
                 <div class=" border-color hidden">
                     <!-- contacts--div--popUps-importDelete -->
@@ -231,17 +233,560 @@
                 </div>
             </div>
         </section>
-        <!-- companies -->
+        <!-- *************************************************************COMPANIES**************************************** -->
         <section id="companies" class="hidden">
 
+            <div class="container mt-2">
+                <div id="divGetCompany" class="card">
+                    <div class="card-header">
+                        <h4>Compañías</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- BUSQUEDA -->
+                        <div class="row">
+
+                            <div id="searchCompany" class="col-sm-12 col-md-6">
+                                <div id="userList_filter" class="dataTables_filter">
+                                    <label>Search:
+                                        <input type="search" class="form-control form-control-sm" placeholder="Buscar por nombre" aria-controls="userList">
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <button id="btnCreateCompany" type="button" class="btn btn-outline-secondary btn-lg btn-block">Crear nueva compañía</button>
+                                <!-- <div class="dataTables_length" id="userList_length">
+                                    <label>Show 
+                                        <select name="userList_length" aria-controls="userList" class="custom-select custom-select-sm form-control form-control-sm">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select> entries
+                                    </label>
+                                </div> -->
+                            </div>
+                        </div>
+                        <!-- TABLA -->
+                        <div id="tableCompany" class="table-responsive">
+                            <table id="companiesList" class="table table-striped table-bordered table-dark">
+                                <thead class="">
+                                    <tr>
+                                        <th scope="col">NIT</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Teléfono</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Dirección</th>
+                                        <th scope="col">Ciudad</th>
+                                        <th scope="col">Editar | Eliminar</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableCompanies">
+                                    <tr>
+                                        <td>1234</td>
+                                        <td>une</td>
+                                        <td>222 11 33</td>
+                                        <td>une@une.com</td>
+                                        <td>calle 34</td>
+                                        <td>Medellin</td>
+                                        <td>
+                                            <a id="editCompany" href="#"><i class="fas fa-edit"></i></a> | <a id="deleteCompany" href="#"><i class="fas fa-user-times"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="pageCompany" class="row">
+                            <div class="col-sm-12 col-md-5">
+                                <div class="dataTables_info" id="userList_info" role="status" aria-live="polite">Showing 1 to 1 of 1 entries</div>
+                            </div>
+                            <div class="col-sm-12 col-md-7">
+                                <div class="dataTables_paginate paging_simple_numbers" id="userList_paginate">
+                                    <ul class="pagination">
+                                        <li class="paginate_button page-item previous disabled" id="userList_previous"><a href="#" aria-controls="userList" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
+                                        <li class="paginate_button page-item active"><a href="#" aria-controls="userList" data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
+                                        <li class="paginate_button page-item next disabled" id="userList_next"><a href="#" aria-controls="userList" data-dt-idx="2" tabindex="0" class="page-link">Next</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- formulario registro -->
+                        <div id="divCreateCompany" class="mt-1 hidden">
+
+                            <div class="card-body">
+                                <h2 class="title">Registro de Compañías</h2>
+                                <form method="POST">
+                                    <div class="input-group">
+                                        <input id="inputNit" class="input--style-3" type="number" placeholder="NIT" name="name">
+                                    </div>
+                                    <div class="input-group">
+                                        <input id="inputName" class="input--style-3" type="text" placeholder="Nombre" name="name">
+                                    </div>
+                                    <div class="input-group">
+                                        <input id="inputPhone" class="input--style-3" type="number" placeholder="Teléfono" name="name">
+                                    </div>
+                                    <div class="input-group">
+                                        <input id="inputEmail" class="input--style-3" type="email" placeholder="Email" name="email">
+                                    </div>
+                                    <div class="input-group">
+                                        <input id="inputAddress" class="input--style-3" type="text" placeholder="Dirección" name="email">
+                                    </div>
+                                    <div class="input-group">
+                                        <div class="btn-group">
+                                            <button id="inputCity" class="btn btn-dark dropdown-toggle align-left bg-dropdown" type="button" id="dropdownCity" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Ciudad
+                                          </button>
+                                            <div class="dropdown-menu">
+                                                <button class="dropdown-item" type="button">Auxiliar</button>
+                                                <button class="dropdown-item" type="button">Analista</button>
+                                                <button class="dropdown-item" type="button">Coordinador</button>
+                                                <button class="dropdown-item" type="button">Gerente</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-t-10">
+                                        <button id="addCompany" class="btn1 btn--pill btn--green" type="submit">Registrar</button>
+                                    </div>
+                                    <div class="p-t-10">
+                                        <button id="btnUpdateCompany" class="hidden" type="submit">Actualizar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
         </section>
-        <!-- users -->
+        <!-- *************************************************************USERS**************************************** -->
         <section id="users" class="hidden">
 
-        </section>
-        <!-- region and citys -->
-        <section id="regionCity" class="hidden">
+            <!-- <div class="page-wrapper bg-gra-01 p-t-180 p-b-100 font-poppins"> -->
+            <div class="page-wrapper bg-image  p-t-30 p-b-70 font-poppins">
+                <div class="wrapper wrapper--w780">
+                    <!-- opciones -->
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-secondary active">
+                            <input type="radio" name="options" id="optUser1" checked> Registro
+                        </label>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="options" id="optUser2"> Lista usuarios
+                        </label>
+                    </div>
+                    <!-- formulario registro -->
+                    <div id="divCreateUser" class="card card-3">
+                        <div class="card-heading"></div>
+                        <div class="card-body">
+                            <h2 class="title">Registro de usuarios</h2>
+                            <form method="POST">
+                                <div class="input-group">
+                                    <input class="input--style-3" type="text" placeholder="Nombre" name="name">
+                                </div>
+                                <div class="input-group">
+                                    <input class="input--style-3" type="text" placeholder="Apellido" name="name">
+                                </div>
+                                <div class="input-group">
+                                    <input class="input--style-3" type="email" placeholder="Email" name="email">
+                                </div>
+                                <div class="input-group">
+                                    <div class="btn-group">
+                                        <button class="btn btn-secondary dropdown-toggle bg-dropdown" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Perfil
+                                          </button>
+                                        <div class="dropdown-menu">
+                                            <button class="dropdown-item" type="button">Auxiliar</button>
+                                            <button class="dropdown-item" type="button">Analista</button>
+                                            <button class="dropdown-item" type="button">Coordinador</button>
+                                            <button class="dropdown-item" type="button">Gerente</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <input type="password" placeholder="Contraseña" class="input--style-3">
+                                </div>
+                                <div class="input-group">
+                                    <input type="password" placeholder="Confirmar Contraseña" class="input--style-3">
+                                </div>
+                                <div class="p-t-10">
+                                    <button class="btn1 btn--pill btn--green" type="submit">Registrar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Listado de usuarios -->
+                    <div id="divGetUsers" class="hidden">
+                        <div class="card-header">
+                            <h4>Roster</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="userList" class="table table-striped table-bordered table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Apellido</th>
+                                            <th scope="col">E-mail</th>
+                                            <th scope="col">Perfil</th>
+                                            <th scope="col">Edit | Elim</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableUsers">
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>Cristian</td>
+                                            <td>Ruiz</td>
+                                            <td>c.r.username</td>
+                                            <td>c.r.username@blog.com</td>
+                                            <td>
+                                                <a href="#"><i class="fas fa-edit"></i></a> | <a href="#"><i class="fas fa-user-times"></i></a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- *************************************************************REGION**************************************** -->
+        <section id="regionCity" class="">
+            <!-- hidden -->
+            <div class="container my-5">
+                <!-- <button id="btnAddRegion" type="button" class="btn btn-outline-primary m-2">Add Region</button> -->
+                <div class="btn-group">
+                    <button id="btnAddRegion" type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Add Region
+                    </button>
+                    <div id="listOptionsRegion" class="dropdown-menu">
+
+                    </div>
+                </div>
+                <button id="btnDeleteRegion" type="button" class="btn btn-outline-danger">Delete Region</button>
+            </div>
+
+            <!-- CONTENEDOR DE Regiones -->
+            <!-- <div id="containerRegion" class="row" style=" background-color: aqua;"> -->
+            <div class="container">
+
+                <!-- </div> -->
+                <!-- -----------------------------------------------------------AFRICA -->
+                <div id="divReg1" class="col m-5">
+
+                    <!-- ********************FILA1****************** -->
+                    <div id="divReg1T" class="row">
+                        <div class="col border-t">
+                            <h2>Africa</h2>
+                        </div>
+                        <div class="col">
+                            <div class="btn-group dropleft">
+                                <button id="btnAddCountry" type="button" class="btn btn-secondary dropdown-toggle mt-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                País
+                                </button>
+                                <div id="divAddCountry" class="dropdown-menu">
+                                    <!-- lista de paises -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ********************FILA2****************** -->
+                    <div id="divCou1" class="row">
+
+                        <div class="col border-t-c">
+                            <h3>Costa de Marfil</h3>
+                        </div>
+                        <div class="col">
+                            <div class="btn-group dropleft">
+                                <button id="btnAddCountry" type="button" class="btn btn-secondary dropdown-toggle mt-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Ciudad
+                                    </button>
+                                <div id="divAddCountry" class="dropdown-menu">
+                                    <!-- lista de paises -->
+                                </div>
+                            </div>
+                        </div>
+                        <div id="divCit1" class="col-12 p-2 border-t-ct">
+                            <h4>Abiyan</h4>
+                        </div>
+                        <div id="divCit2" class="col-12 p-2 border-t-ct">
+                            <h4>Yamusukro</h4>
+                        </div>
+                    </div>
+
+                    <!-- ********************FILA3****************** -->
+                    <div id="divCou2" class="row">
+
+                        <div class="col border-t-c">
+                            <h3>Ghana</h3>
+                        </div>
+
+                        <div class="col">
+                            <div class="btn-group dropleft">
+                                <button id="btnAddCountry" type="button" class="btn btn-secondary dropdown-toggle mt-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Ciudad
+                                    </button>
+                                <div id="divAddCountry" class="dropdown-menu">
+                                    <!-- lista de paises -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="divCit3" class="col-12 p-2 border-t-ct">
+                            <h4>Acra</h4>
+                        </div>
+                        <div id="divCit4" class="col-12 p-2 border-t-ct">
+                            <h4>Kumasi</h4>
+                        </div>
+
+                    </div>
+                    <!-- -_________________________-FIN DE FILAS -->
+                </div>
+
+                <!-- -----------------------------------------------------------ASIA -->
+                <div id="divReg2" class="col m-5">
+
+                    <!-- ********************FILA1****************** -->
+                    <div class="row">
+                        <div class="col border-t">
+                            <h2>Asia</h2>
+                        </div>
+                        <div class="col">
+                            <div class="btn-group dropleft">
+                                <button id="btnAddCountry" type="button" class="btn btn-secondary dropdown-toggle mt-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                País
+                                </button>
+                                <div id="divAddCountry" class="dropdown-menu">
+                                    <!-- lista de paises -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ********************FILA2****************** -->
+                    <div id="divCou" class="row">
+                        <div class="col-6 border-t-c">
+                            <h3>China</h3>
+                        </div>
+                        <div class="col-6">
+                            <div class="btn-group dropleft">
+                                <button id="btnAddCountry" type="button" class="btn btn-secondary dropdown-toggle mt-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Ciudad
+                                    </button>
+                                <div id="divAddCountry" class="dropdown-menu">
+                                    <!-- lista de paises -->
+                                </div>
+                            </div>
+                        </div>
+                        <div id="divCit5" class="col-12 border-t-ct">
+                            <h4>Pekin</h4>
+                        </div>
+                        <div id="divCit6" class="col-12 border-t-ct">
+                            <h4>Wuhan</h4>
+                        </div>
+                    </div>
+                    <!-- ********************FILA3****************** -->
+                    <div id="divCou" class="row">
+                        <div class="col-6 border-t-c">
+                            <h3>Japon</h3>
+                        </div>
+                        <div class="col-6">
+                            <div class="btn-group dropleft">
+                                <button id="btnAddCountry" type="button" class="btn btn-secondary dropdown-toggle mt-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Ciudad
+                                    </button>
+                                <div id="divAddCountry" class="dropdown-menu">
+                                    <!-- lista de paises -->
+                                </div>
+                            </div>
+                        </div>
+                        <div id="divCit7" class="col-12 border-t-ct">
+                            <h4>Tokio</h4>
+                        </div>
+                        <div id="divCit8" class="col-12 border-t-ct">
+                            <h4>Yokohama</h4>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- -----------------------------------------------------------EUROPA -->
+                <div id="divReg3" class="col m-5">
+                    <!-- ********************FILA1****************** -->
+                    <div class="row">
+                        <div class="col-6 border-t">
+                            <h2>Europa</h2>
+                        </div>
+                        <div class="col-6">
+                            <div class="btn-group dropleft">
+                                <button id="btnAddCountry" type="button" class="btn btn-secondary dropdown-toggle mt-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                País
+                                </button>
+                                <div id="divAddCountry" class="dropdown-menu">
+                                    <!-- lista de paises -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ********************FILA2****************** -->
+                    <div id="divCou" class="row">
+
+                        <div class="col border-t-c">
+                            <h3>Alemania</h3>
+                        </div>
+                        <div class="col">
+                            <div class="btn-group dropleft">
+                                <button id="btnAddCountry" type="button" class="btn btn-secondary dropdown-toggle mt-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Ciudad
+                                    </button>
+                                <div id="divAddCountry" class="dropdown-menu">
+                                    <!-- lista de paises -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="divCit9" class="col-12 border-t-ct">
+                            <h4>Berlin</h4>
+                        </div>
+                        <div id="divCit10" class="col-12 border-t-ct">
+                            <h4>Munich</h4>
+                        </div>
+                    </div>
+                    <!-- ********************FILA3****************** -->
+                    <div id="divCou" class="row">
+                        <div class="col-6 border-t-c">
+                            <h3>España</h3>
+                        </div>
+                        <div class="col-6">
+                            <div class="btn-group dropleft">
+                                <button id="btnAddCountry" type="button" class="btn btn-secondary dropdown-toggle mt-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Ciudad
+                                    </button>
+                                <div id="divAddCountry" class="dropdown-menu">
+                                    <!-- lista de paises -->
+                                </div>
+                            </div>
+                        </div>
+                        <div id="divCit11" class="col-12 border-t-ct">
+                            <h4>Barcelona</h4>
+                        </div>
+                        <div id="divCit12" class="col-12 border-t-ct">
+                            <h4>Madrid</h4>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- -----------------------------------------------------------NORTEAMERICA -->
+                <div id="divReg4" class="col m-5">
+                    <!-- ********************FILA1****************** -->
+                    <div class="row">
+                        <div class="col-6 border-t">
+                            <h2>Norteamerica</h2>
+                        </div>
+                        <div class="col-6">
+                            <div class="btn-group dropleft">
+                                <button id="btnAddCountry" type="button" class="btn btn-secondary dropdown-toggle mt-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                País
+                                </button>
+                                <div id="divAddCountry" class="dropdown-menu">
+                                    <!-- lista de paises -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ********************FILA2****************** -->
+                    <div id="divCou" class="row">
+                        <div class="col-6 border-t-c">
+                            <h3>Canada</h3>
+                        </div>
+                        <div class="col-6">
+                            <div class="btn-group dropleft">
+                                <button id="btnAddCountry" type="button" class="btn btn-secondary dropdown-toggle mt-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Ciudad
+                                    </button>
+                                <div id="divAddCountry" class="dropdown-menu">
+                                    <!-- lista de paises -->
+                                </div>
+                            </div>
+                        </div>
+                        <div id="divCit" class="col-12 border-t-ct">
+                            <h4>Toronto</h4>
+                        </div>
+                        <div id="divCit" class="col-12 border-t-ct">
+                            <h4>Quebec</h4>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- -----------------------------------------------------------SURAMERICA -->
+                <div id="divReg5" class="col m-5">
+                    <!-- ********************FILA1****************** -->
+                    <div class="row">
+                        <div class="col-6 border-t">
+                            <h2>Suramerica</h2>
+                        </div>
+                        <div class="col-6">
+                            <div class="btn-group dropleft">
+                                <button id="btnAddCountry" type="button" class="btn btn-secondary dropdown-toggle mt-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                País
+                                </button>
+                                <div id="divAddCountry" class="dropdown-menu">
+                                    <!-- lista de paises -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ********************FILA2****************** -->
+                    <div id="divCou" class="row">
+                        <div class="col-6 border-t-c">
+                            <h3>Argentina</h3>
+                        </div>
+                        <div class="col-6">
+                            <div class="btn-group dropleft">
+                                <button id="btnAddCountry" type="button" class="btn btn-secondary dropdown-toggle mt-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Ciudad
+                                    </button>
+                                <div id="divAddCountry" class="dropdown-menu">
+                                    <!-- lista de paises -->
+                                </div>
+                            </div>
+                        </div>
+                        <div id="divCit" class="col-12 border-t-ct">
+                            <h4>Buenos Aires</h4>
+                        </div>
+                        <div id="divCit" class="col-12 border-t-ct">
+                            <h4>Ushuaia</h4>
+                        </div>
+                    </div>
+                    <!-- ********************FILA3****************** -->
+                    <div id="divCou" class="row">
+                        <div class="col-6 border-t-c">
+                            <h3>Colombia</h3>
+                        </div>
+                        <div class="col-6">
+                            <div class="btn-group dropleft">
+                                <button id="btnAddCountry" type="button" class="btn btn-secondary dropdown-toggle mt-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Ciudad
+                                    </button>
+                                <div id="divAddCountry" class="dropdown-menu">
+                                    <!-- lista de paises -->
+                                </div>
+                            </div>
+                        </div>
+                        <div id="divCit" class="col-12 border-t-ct">
+                            <h4>Medellin</h4>
+                        </div>
+                        <div id="divCit" class="col-12 border-t-ct">
+                            <h4>Cali</h4>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </section>
 
     </main>
@@ -252,6 +797,10 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="scripts/1_index.js"></script>
+    <script src="scripts/3_companies.js"></script>
+    <script src="scripts/4_users.js"></script>
+    <script src="scripts/5_regions.js"></script>
 </body>
 
 </html>

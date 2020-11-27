@@ -28,7 +28,7 @@ exports.selectData = async(req, res, table, data) => {
         })
         .then(result => {
             if (result != "") {
-                return result;
+                queryResult = result;
             }
         }).catch(err => {
             console.error(err);

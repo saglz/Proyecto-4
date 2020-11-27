@@ -23,7 +23,7 @@ const createCompany = async(req, res) => {
 /* ---------------------------------------------READ COMPANY -----------------------------------------------------*/
 const readCompany = async(req, res) => {
 
-    let readComp = await querys.selectAll(req, res, 'companies');
+    let readComp = await querys.selectData(req, res, 'companies c INNER JOIN cities cp ON c.cities_id=cp.cities_id', 'c.nit, c.name, c.phone, c.email, c.address, cp.name as city');
 
     if (!!readComp) {
         response.success(req, res, { readComp }, 200);

@@ -19,6 +19,9 @@ btnRegion.addEventListener('click', btnRegionChange);
 /* ------------------------------------FUNCIONES DE NORMALIZACIÓN------------------------- */
 
 function btnContactsChange() {
+    resetActive()
+    btnContacts.classList.add('active');
+
     secContacts.classList.add('secContacts');
     secContacts.classList.remove('hidden');
     secCompanies.classList.add('hidden');
@@ -30,6 +33,9 @@ function btnContactsChange() {
 }
 
 function btnCompaniesChange() {
+    resetActive()
+    btnCompanies.classList.add('active');
+
     secContacts.classList.add('hidden');
     secContacts.classList.remove('secContacts');
     secCompanies.classList.add('secCompanies');
@@ -41,6 +47,9 @@ function btnCompaniesChange() {
 }
 
 function btnUsersChange() {
+    resetActive()
+    btnUsers.classList.add('active');
+
     secContacts.classList.add('hidden');
     secContacts.classList.remove('secContacts');
     secCompanies.classList.add('hidden');
@@ -52,6 +61,9 @@ function btnUsersChange() {
 }
 
 function btnRegionChange() {
+    resetActive()
+    btnRegion.classList.add('active');
+
     secContacts.classList.add('hidden');
     secContacts.classList.remove('secContacts');
     secCompanies.classList.add('hidden');
@@ -60,4 +72,12 @@ function btnRegionChange() {
     secUsers.classList.remove('secUsers');
     secRegion.classList.add('secRegion');
     secRegion.classList.remove('hidden');
+}
+
+/* RESET MENU ACTIVE */
+function resetActive() {
+    btnContacts.classList.remove('active');
+    btnCompanies.classList.remove('active');
+    btnUsers.classList.remove('active');
+    btnRegion.classList.remove('active');
 }

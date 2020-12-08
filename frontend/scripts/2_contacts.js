@@ -1,38 +1,38 @@
 /* ------------------------------------VARIABLES GLOBALES---------------------------------- */
-let arrAux = [];
+/* let arrAux = []; 
 
-let addCompany = document.getElementById('addCompany'); //btn de Registro    C
-let btnComp = document.getElementById('btnCompanies'); //                    R
-let editCompany = document.getElementById('editCompany'); //                 U
+let addCompany = document.getElementById('addCompany'); //btn de Registro    C*/
+let btnCont = document.getElementById('btnContacts'); //                    R
+/* let editCompany = document.getElementById('editCompany'); //                 U
 let deleteCompany = document.getElementById('deleteCompany'); //             D
 
-let searchCompany = document.getElementById('searchCompany');
-let tableCompanies = document.getElementById('tableCompanies'); //BODY DE LA TABLA
-let tableCompany = document.getElementById('tableCompany');
-let pageCompany = document.getElementById('pageCompany');
+let searchCompany = document.getElementById('searchCompany'); */
+let tableContacts = document.getElementById('tableContacts'); //BODY DE LA TABLA
+let tableContact = document.getElementById('tableContact');
+/* let pageCompany = document.getElementById('pageCompany');
 let btnCreateCompany = document.getElementById('btnCreateCompany');
 let divCreateCompany = document.getElementById('divCreateCompany');
-let btnUpdateCompany = document.getElementById('btnUpdateCompany');
+let btnUpdateCompany = document.getElementById('btnUpdateCompany'); */
 
 
 /* Campos formulario */
-let inputNit = document.getElementById('inputNit');
+/* let inputNit = document.getElementById('inputNit');
 let inputName = document.getElementById('inputName');
 let inputPhone = document.getElementById('inputPhone');
 let inputEmail = document.getElementById('inputEmail');
-let inputAddress = document.getElementById('inputAddress');
+let inputAddress = document.getElementById('inputAddress'); */
 /* let inputCiudad = document.getElementById('btnCompanies'); */
 
 /* ------------------------------------EVENTOS LISTENER----------------------------------- */
 
 /* CRUD */
-addCompany.addEventListener('click', btnAddCompanies);
-btnComp.addEventListener('click', btnGetCompanies);
-editCompany.addEventListener('click', btnEditCompany);
-deleteCompany.addEventListener('click', btnDeleteCompany);
+/* addCompany.addEventListener('click', btnAddCompanies); */
+btnCont.addEventListener('click', btnGetContacts);
+/* editCompany.addEventListener('click', btnEditCompany);
+deleteCompany.addEventListener('click', btnDeleteCompany); */
 /* Otros */
-btnCreateCompany.addEventListener('click', showCreateCompany);
-btnUpdateCompany.addEventListener('click', btnEditCompany);
+/* btnCreateCompany.addEventListener('click', showCreateCompany);
+btnUpdateCompany.addEventListener('click', btnEditCompany); */
 
 
 /* ------------------------------------FUNCIONES DE CRUD ------------------------- */
@@ -60,20 +60,20 @@ function btnAddCompanies() {
         .catch(err => console.log(err));
 }
 
-async function btnGetCompanies() {
+async function btnGetContacts() {
     let arrData;
-    let url = `http://localhost:3000/v1/readCompany`;
+    let url = `http://localhost:3000/v1/readContacts`;
     await fetch(url)
         .then((resp) => resp.json())
         .then(async function(data) {
-            arrData = data.body.readComp;
-            arrAux = data.body.readComp;
-            tableCompanies.innerText = "";
+            arrData = data.body.readCont;
+            /* arrAux = data.body.readCont; */
+            tableContact.innerText = "";
             for (var index = 0; index < arrData.length; index++) {
 
                 var tr = document.createElement('tr');
-                tr.innerHTML = `<td>${arrData[index].nit}</td><td>${arrData[index].name}</td><td>${arrData[index].phone}</td><td>${arrData[index].email}</td><td>${arrData[index].address}</td><td>${arrData[index].city}</td><td><a id="u${arrData[index].nit}" onclick="updateCompany(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="d${arrData[index].nit}" onclick="btnDeleteCompany(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
-                tableCompanies.appendChild(tr);
+                tr.innerHTML = `<td>${arrData[index].name} ${arrData[index].lastName}<br>${arrData[index].email}</td><td>${arrData[index].country}<br>${arrData[index].region}</td><td>${arrData[index].company}</td><td>${arrData[index].position}</td><td>${arrData[index].channel}</td><td>${arrData[index].interest}%</td><td><a id="u${arrData[index].name}" onclick="updateCompany(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="d${arrData[index].name}" onclick="btnDeleteCompany(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
+                tableContact.appendChild(tr);
             }
             return arrData;
         })

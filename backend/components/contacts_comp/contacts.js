@@ -23,7 +23,7 @@ const createContacts = async(req, res) => {
 /* ---------------------------------------------READ CONTACTS -----------------------------------------------------*/
 const readContacts = async(req, res) => {
 
-    let readCont = await querys.selectAll(req, res, 'contacts');
+    let readCont = await querys.selectData(req, res, '((((contacts AS C INNER JOIN companies AS cp ON c.companies_id = cp.companies_id)INNER JOIN cities AS ct ON ct.cities_id = cp.cities_id)INNER JOIN countries AS cou ON cou.countries_id = ct.countries_id)INNER JOIN region AS r ON r.region_id = cou.region_id)', 'c.name, c.lastName, c.email, cp.name as company,cou.name as country, r.name as region, c.position, c.channel, c.interest');
 
     if (!!readCont) {
         response.success(req, res, { readCont }, 200);

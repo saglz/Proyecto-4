@@ -322,10 +322,14 @@ h6 {
     background: #273bee;
 }
 
+.table td,
+.table th {
+    border-bottom: 1px solid #000;
+}
 
-/* .col {
-    border: 1px solid #000;
-} */
+.centerContent {
+    text-align: center;
+}
 
 .border-t {
     border-bottom: 1px solid #000;

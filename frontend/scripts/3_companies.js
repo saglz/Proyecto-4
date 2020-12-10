@@ -3,8 +3,8 @@ let arrAux = [];
 
 let addCompany = document.getElementById('addCompany'); //btn de Registro    C
 let btnComp = document.getElementById('btnCompanies'); //                    R
-let editCompany = document.getElementById('editCompany'); //                 U
-let deleteCompany = document.getElementById('deleteCompany'); //             D
+/* let editCompany = document.getElementById('editCompany'); //                 U
+let deleteCompany = document.getElementById('deleteCompany'); //             D */
 
 let searchCompany = document.getElementById('searchCompany');
 let tableCompanies = document.getElementById('tableCompanies'); //BODY DE LA TABLA
@@ -28,8 +28,8 @@ let inputAddress = document.getElementById('inputAddress');
 /* CRUD */
 addCompany.addEventListener('click', btnAddCompanies);
 btnComp.addEventListener('click', btnGetCompanies);
-editCompany.addEventListener('click', btnEditCompany);
-deleteCompany.addEventListener('click', btnDeleteCompany);
+/* editCompany.addEventListener('click', btnEditCompany);
+deleteCompany.addEventListener('click', btnDeleteCompany); */
 /* Otros */
 btnCreateCompany.addEventListener('click', showCreateCompany);
 btnUpdateCompany.addEventListener('click', btnEditCompany);
@@ -72,7 +72,7 @@ async function btnGetCompanies() {
             for (var index = 0; index < arrData.length; index++) {
 
                 var tr = document.createElement('tr');
-                tr.innerHTML = `<td>${arrData[index].nit}</td><td>${arrData[index].name}</td><td>${arrData[index].phone}</td><td>${arrData[index].email}</td><td>${arrData[index].address}</td><td>${arrData[index].city}</td><td><a id="u${arrData[index].nit}" onclick="updateCompany(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="d${arrData[index].nit}" onclick="btnDeleteCompany(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
+                tr.innerHTML = `<td>${arrData[index].nit}</td><td>${arrData[index].name}</td><td>${arrData[index].phone}</td><td>${arrData[index].email}</td><td>${arrData[index].address}</td><td>${arrData[index].city}</td><td class="centerContent"><a id="u${arrData[index].nit}" onclick="updateCompany(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="d${arrData[index].nit}" onclick="btnDeleteCompany(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
                 tableCompanies.appendChild(tr);
             }
             return arrData;

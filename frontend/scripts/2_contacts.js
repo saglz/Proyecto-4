@@ -1,18 +1,18 @@
 /* ------------------------------------VARIABLES GLOBALES---------------------------------- */
-/* let arrAux = []; 
+/* let arrAux = []; */
 
-let addCompany = document.getElementById('addCompany'); //btn de Registro    C*/
-let btnCont = document.getElementById('btnContacts'); //                    R
-/* let editCompany = document.getElementById('editCompany'); //                 U
-let deleteCompany = document.getElementById('deleteCompany'); //             D
+let addContact = document.getElementById('addContact'); //btn de Registro    C
+let getContact = document.getElementById('btnContacts'); //                     R
+/* let editContact = document.getElementById('editContact'); //                 U
+let deleteContact = document.getElementById('deleteContact'); //             D */
 
-let searchCompany = document.getElementById('searchCompany'); */
+let searchContact = document.getElementById('searchContact');
 let tableContacts = document.getElementById('tableContacts'); //BODY DE LA TABLA
 let tableContact = document.getElementById('tableContact');
-/* let pageCompany = document.getElementById('pageCompany');
-let btnCreateCompany = document.getElementById('btnCreateCompany');
-let divCreateCompany = document.getElementById('divCreateCompany');
-let btnUpdateCompany = document.getElementById('btnUpdateCompany'); */
+let pageContact = document.getElementById('pageContact');
+let btnCreateContact = document.getElementById('btnCreateContact');
+let divCreateContact = document.getElementById('divCreateContact');
+let btnUpdateContact = document.getElementById('btnUpdateContact');
 
 
 /* Campos formulario */
@@ -26,23 +26,23 @@ let inputAddress = document.getElementById('inputAddress'); */
 /* ------------------------------------EVENTOS LISTENER----------------------------------- */
 
 /* CRUD */
-/* addCompany.addEventListener('click', btnAddCompanies); */
-btnCont.addEventListener('click', btnGetContacts);
-/* editCompany.addEventListener('click', btnEditCompany);
-deleteCompany.addEventListener('click', btnDeleteCompany); */
+addContact.addEventListener('click', btnAddContact);
+getContact.addEventListener('click', btnGetContacts);
+/* editContact.addEventListener('click', btnEditContact);
+deleteContact.addEventListener('click', btnDeleteContact); */
 /* Otros */
-/* btnCreateCompany.addEventListener('click', showCreateCompany);
-btnUpdateCompany.addEventListener('click', btnEditCompany); */
+btnCreateContact.addEventListener('click', showCreateContact);
+btnUpdateContact.addEventListener('click', btnEditContact);
 
 
 /* ------------------------------------FUNCIONES DE CRUD ------------------------- */
 
-function btnAddCompanies() {
+function btnAddContact() {
 
-    let url = `http://localhost:3000/v1/createCompany`;
+    let url = `http://localhost:3000/v1/createContacts`;
     fetch(url, {
             method: 'POST',
-            body: `{"nit":"${inputNit.value}","name":"${inputName.value}","phone":"${inputPhone.value}","email":"${inputEmail.value}","address":"${inputAddress.value}","cities_id":"18"}`,
+            body: `{"id":"${inputIdCont.value}","name":"${inputNameCont.value}","lastName":"${inputName.value}","email":"${inputEmailCont.value}","position":"${inputPositionCont.value}","channel":"${inputChannelCont.value}","companies_id":"1"}`,
             headers: {
                 "Content-Type": "application/json"
             }
@@ -72,7 +72,7 @@ async function btnGetContacts() {
             for (var index = 0; index < arrData.length; index++) {
 
                 var tr = document.createElement('tr');
-                tr.innerHTML = `<td>${arrData[index].name} ${arrData[index].lastName}<br>${arrData[index].email}</td><td>${arrData[index].country}<br>${arrData[index].region}</td><td>${arrData[index].company}</td><td>${arrData[index].position}</td><td>${arrData[index].channel}</td><td>${arrData[index].interest}%</td><td><a id="u${arrData[index].name}" onclick="updateCompany(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="d${arrData[index].name}" onclick="btnDeleteCompany(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
+                tr.innerHTML = `<td>${arrData[index].name} ${arrData[index].lastName}<br>${arrData[index].email}</td><td>${arrData[index].country}<br>${arrData[index].region}</td><td>${arrData[index].company}</td><td>${arrData[index].position}</td><td>${arrData[index].channel}</td><td>${arrData[index].interest}%</td><td class="centerContent"><a id="u${arrData[index].id}" onclick="updateContact(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="d${arrData[index].id}" onclick="btnDeleteContact(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
                 tableContact.appendChild(tr);
             }
             return arrData;
@@ -81,9 +81,9 @@ async function btnGetContacts() {
 
 }
 
-function btnEditCompany() {
+function btnEditContact() {
 
-    let url = `http://localhost:3000/v1/updateCompany`;
+    let url = `http://localhost:3000/v1/updateContacts`;
     fetch(url, {
             method: 'PUT',
             body: `{"nit":"${inputNit.value}","name":"${inputName.value}","phone":"${inputPhone.value}","email":"${inputEmail.value}","address":"${inputAddress.value}","cities_id":"17"}`,
@@ -94,13 +94,13 @@ function btnEditCompany() {
         .catch(err => console.log(err));
 }
 
-async function btnDeleteCompany(iconDelete) {
-    let nit = iconDelete.id;
-    nit = nit.slice(1, nit.length);
-    let url = `http://localhost:3000/v1/deleteCompany`;
+async function btnDeleteContact(iconDelete) {
+    let id = iconDelete.id;
+    id = id.slice(1, id.length);
+    let url = `http://localhost:3000/v1/deleteContacts`;
     await fetch(url, {
             method: 'DELETE',
-            body: `{"nit":"${nit}"}`,
+            body: `{"id":"${id}"}`,
             headers: {
                 "Content-Type": "application/json"
             }
@@ -109,28 +109,28 @@ async function btnDeleteCompany(iconDelete) {
         .then(res => console.log(res))
         .catch(err => console.log(err));
 
-    btnGetCompanies();
+    btnGetContacts();
 }
 
 
 /* ------------------------------------FUNCIONES DE NORMALIZACIÓN------------------------- */
 
-function showCreateCompany() {
-    normalizeForm();
-    searchCompany.classList.toggle('hidden');
-    tableCompany.classList.toggle('hidden');
-    pageCompany.classList.toggle('hidden');
-    divCreateCompany.classList.toggle('hidden');
-    divCreateCompany.classList.toggle('card');
-    divCreateCompany.classList.toggle('card-3');
-    pageCompany.classList.toggle('row');
+function showCreateContact() {
+    normalizeFormContact();
+    searchContact.classList.toggle('hidden');
+    tableContact.classList.toggle('hidden');
+    pageContact.classList.toggle('hidden');
+    divCreateContact.classList.toggle('hidden');
+    divCreateContact.classList.toggle('card');
+    divCreateContact.classList.toggle('card-3');
+    pageContact.classList.toggle('row');
 
     btnCreateCompany.innerText === "Crear nueva compañía" ? btnCreateCompany.innerText = "Lista de compañías" : btnCreateCompany.innerText = "Crear nueva compañía";
 
     btnGetCompanies();
 }
 
-function showUpdateCompany() {
+function showUpdateContact() {
     btnUpdateCompany.classList.toggle('btn1');
     btnUpdateCompany.classList.toggle('btn--pill');
     btnUpdateCompany.classList.toggle('btn--blue');
@@ -152,26 +152,27 @@ function searchValue(nit) {
     return dataToEdit;
 }
 
-function updateCompany(iconEdit) {
+function updateContact(iconEdit) {
 
     let nit = iconEdit.id;
     nit = nit.slice(1, nit.length);
     let dataToEdit = searchValue(nit);
 
-    showCreateCompany();
+    showCreateContact();
 
     inputNit.value = dataToEdit.nit;
     inputName.value = dataToEdit.name;
     inputPhone.value = dataToEdit.phone;
     inputEmail.value = dataToEdit.email;
     inputAddress.value = dataToEdit.address;
-    showUpdateCompany();
+    showUpdateContact();
 }
 
-function normalizeForm() {
-    inputNit.value = "";
+function normalizeFormContact() {
+    inputIdCont.value = "";
+    inputNameCont.value = "";
     inputName.value = "";
-    inputPhone.value = "";
-    inputEmail.value = "";
-    inputAddress.value = "";
+    inputEmailCont.value = "";
+    inputPositionCont.value = "";
+    inputChannelCont.value = "";
 }

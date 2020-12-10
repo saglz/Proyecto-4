@@ -106,3 +106,21 @@ VALUES
   (NULL, 123, "Elsa", "Polindo", "bancolombi@mail.com", "gerente", "whatsapp", 80, 1),
   (NULL, 456, "Belen","Gena", "alpin@mail.com", "comercial", "facebook, whatsapp", 50, 2),
   (NULL, 789, "Lucas","Trado", "ecopetrol@mail.com", "coordinador", "instagram", 33, 3);
+
+
+-- ******************************* TABLA USUARIOS
+CREATE TABLE users (
+  consecutive INT PRIMARY KEY AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  username VARCHAR (150) NOT NULL,
+  password VARCHAR (150) NOT NULL,
+  name VARCHAR (150) NOT NULL,
+  lastName VARCHAR (150) NOT NULL,
+  email VARCHAR (150) NOT NULL,
+  profileAdmin BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+INSERT INTO
+  contacts
+VALUES
+  (NULL, 123, "omarGarita", "1234", "Omar", "Garita", "omar@mail.com", 1);

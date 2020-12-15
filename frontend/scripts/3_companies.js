@@ -21,7 +21,6 @@ let inputName = document.getElementById('inputName');
 let inputPhone = document.getElementById('inputPhone');
 let inputEmail = document.getElementById('inputEmail');
 let inputAddress = document.getElementById('inputAddress');
-/* let inputCiudad = document.getElementById('btnCompanies'); */
 
 /* ------------------------------------EVENTOS LISTENER----------------------------------- */
 
@@ -37,10 +36,11 @@ btnUpdateCompany.addEventListener('click', btnEditCompany);
 
 /* ------------------------------------FUNCIONES DE CRUD ------------------------- */
 
-function btnAddCompanies() {
+async function btnAddCompanies(event) {
+    event.preventDefault();
 
     let url = `http://localhost:3000/v1/createCompany`;
-    fetch(url, {
+    await fetch(url, {
             method: 'POST',
             body: `{"nit":"${inputNit.value}","name":"${inputName.value}","phone":"${inputPhone.value}","email":"${inputEmail.value}","address":"${inputAddress.value}","cities_id":"18"}`,
             headers: {
@@ -48,16 +48,18 @@ function btnAddCompanies() {
             }
         })
         .then((res) => {
-            console.log(res);
-            if (res.status == 201) {
-                res.json().then((data) => {
-                    console.log(data);
-                });
-            } else {
-                alert("Fallo la creación de la compañía");
-            }
+            res.json().then((data) => {
+                if (res.status == 201) {
+                    alert(data.body);
+                    normalizeForm();
+                    showCreateCompany();
+                } else {
+                    alert(data.error);
+                }
+            });
         })
         .catch(err => console.log(err));
+
 }
 
 async function btnGetCompanies() {
@@ -72,7 +74,8 @@ async function btnGetCompanies() {
             for (var index = 0; index < arrData.length; index++) {
 
                 var tr = document.createElement('tr');
-                tr.innerHTML = `<td>${arrData[index].nit}</td><td>${arrData[index].name}</td><td>${arrData[index].phone}</td><td>${arrData[index].email}</td><td>${arrData[index].address}</td><td>${arrData[index].city}</td><td class="centerContent"><a id="u${arrData[index].nit}" onclick="updateCompany(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="d${arrData[index].nit}" onclick="btnDeleteCompany(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
+                tr.innerHTML = `<td><div class="form-check"><input class="form-check-input" onclick="countCheck(this)" type="checkbox" value="" id="ckCont${arrData[index].nit}" name="check"></div></td>
+                <td>${arrData[index].nit}</td><td>${arrData[index].name}</td><td>${arrData[index].phone}</td><td>${arrData[index].email}</td><td>${arrData[index].address}</td><td>${arrData[index].city}</td><td class="centerContent"><a id="u${arrData[index].nit}" onclick="updateCompany(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="d${arrData[index].nit}" onclick="btnDeleteCompany(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
                 tableCompanies.appendChild(tr);
             }
             return arrData;
@@ -106,13 +109,35 @@ async function btnDeleteCompany(iconDelete) {
             }
         })
         .then((resp) => resp.json())
-        .then(res => console.log(res))
+        .then(res => res.body !== "" ? alert(res.body) : alert(res.error))
         .catch(err => console.log(err));
 
     btnGetCompanies();
 }
 
+async function deleteCompanySelect() {
+    let elements = document.getElementsByName(`check`);
 
+    for (i = 1; i < elements.length; i++) {
+        let nit = elements[i].id;
+        nit = nit.slice(6, nit.length);
+        let url = `http://localhost:3000/v1/deleteCompany`;
+
+        if (elements[i].checked) {
+            await fetch(url, {
+                    method: 'DELETE',
+                    body: `{"nit":"${nit}"}`,
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then((resp) => resp.json())
+                .then(res => res.body !== "" ? alert(res.body) : alert(res.error))
+                .catch(err => console.log(err));
+        }
+        btnGetCompanies();
+    }
+}
 /* ------------------------------------FUNCIONES DE NORMALIZACIÓN------------------------- */
 
 function showCreateCompany() {

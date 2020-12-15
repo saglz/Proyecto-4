@@ -63,10 +63,11 @@ html {
     box-sizing: border-box;
 }
 
-* {
+
+/* * {
     padding: 0;
     margin: 0;
-}
+} */
 
 *,
 *:before,
@@ -227,6 +228,10 @@ h6 {
 .bg-dropdown {
     background-color: #000;
     border-color: #000;
+}
+
+.positionRelative {
+    position: relative;
 }
 
 
@@ -414,6 +419,10 @@ input {
     color: #ccc;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 
 /* ==========================================================================
    #SELECT2
@@ -537,7 +546,7 @@ input {
 }
 
 .card-3 .card-heading {
-    background: url("../img/pexels-charles-1851188.jpg") top left/cover no-repeat;
+    background: url("../img/dog.gif") top left/cover no-repeat;
     display: table-cell;
     width: 50%;
 }

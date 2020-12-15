@@ -56,7 +56,7 @@ const deleteContacts = async(req, res) => {
     let { id } = req.body;
     if (!id) return res.status(400).json('parametros mal enviados');
 
-    let deleteCont = await querys.delete(req, res, 'companies', 'nit', nit);
+    let deleteCont = await querys.delete(req, res, 'contacts', 'id', id);
 
     if (!!deleteCont) {
         response.success(req, res, `Contacto eliminado por id: ${id}`, 200);

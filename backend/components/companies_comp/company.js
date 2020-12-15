@@ -23,7 +23,7 @@ const createCompany = async(req, res) => {
 /* ---------------------------------------------READ COMPANY -----------------------------------------------------*/
 const readCompany = async(req, res) => {
 
-    let readComp = await querys.selectData(req, res, 'companies c INNER JOIN cities cp ON c.cities_id=cp.cities_id', 'c.nit, c.name, c.phone, c.email, c.address, cp.name as city');
+    let readComp = await querys.selectData(req, res, 'companies c INNER JOIN cities cp ON c.cities_id=cp.cities_id', 'c.companies_id as id, c.nit, c.name, c.phone, c.email, c.address, cp.name as city');
 
     if (!!readComp) {
         response.success(req, res, { readComp }, 200);
@@ -61,7 +61,7 @@ const deleteCompany = async(req, res) => {
     if (!!deleteComp) {
         response.success(req, res, `Compañía eliminada por NIT: ${nit}`, 200);
     } else {
-        response.error(req, res, 'No se puede eliminar compañía', 400, 'Error eliminando compañía[deleteCompany]');
+        response.error(req, res, 'No se puede eliminar compañía porque tiene contactos asociados', 400, 'Error eliminando compañía[deleteCompany]');
     }
 };
 

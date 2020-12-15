@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="style/style.css">
     <!-- Main CSS-->
     <link href="style/main.css" rel="stylesheet" media="all">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="style/util.css">
+    <link rel="stylesheet" type="text/css" href="style/login.css">
     <title>Proyecto 4</title>
 </head>
 
@@ -20,14 +23,15 @@
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex justify-content-between" id="navbar">
-            <a class="navbar-brand" href="#">LOGO</a>
+            <!-- fixed-top -->
+            <a class="navbar-brand" href="#"><i class="fas fa-globe-americas"></i></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a id="btnContacts" class="nav-link" href="#contacts">Contactos</a>
+                        <a id="btnContacts" class="nav-link active" href="#contacts">Contactos</a>
                     </li>
                     <li class="nav-item">
                         <a id="btnCompanies" class="nav-link" href="#companies">Compañía</a>
@@ -37,6 +41,9 @@
                     </li>
                     <li class="nav-item">
                         <a id="btnRegion" class="nav-link" href="#regionCity">Región/Ciudad</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="btnLogin" class="nav-link" href="#Login">Login</a>
                     </li>
                 </ul>
             </div>
@@ -63,8 +70,8 @@
                                 </div>
                             </div>
 
-                            <div class="col-3">
-                                <button id="btnExportContact" type="button" class="btn btn-outline-secondary btn-lg btn-block">Exportar contacto</button>
+                            <div id="btnExportContact" class="col-3">
+                                <button type="button" class="btn btn-outline-secondary btn-lg btn-block">Exportar contacto</button>
                             </div>
                             <div class="col-3">
                                 <button id="btnCreateContact" type="button" class="btn btn-dark btn-lg btn-block">Agregar contacto</button>
@@ -72,9 +79,25 @@
                         </div>
                         <!-- TABLA -->
                         <div id="tableContacts" class="table-responsive">
-                            <table id="contactList" class="table">
+                            <div class="row">
+                                <div class="col-9">
+                                    <p id="totalCheckContacts"></p>
+                                </div>
+                                <!--  class="hidden" -->
+                                <div class="col-3" onclick="deleteContactSelect()" name="btnDeleteSelect">
+                                    <p id="deleteCheck" class="pointer hidden"><i class="fas fa-trash"></i> Eliminar compañías
+                                    </p>
+                                </div>
+                            </div>
+                            <table id="contactList" class="table mt-4">
                                 <thead class="thead-dark">
                                     <tr>
+                                        <th scope="col">
+                                            <div class="form-check">
+                                                <input id="checkboxContacts" class="form-check-input" type="checkbox" onclick="selectAll(this)" name="checkContacts">
+                                                <label class="form-check-label" for="defaultCheck1"></label>
+                                            </div>
+                                        </th>
                                         <th scope="col">Contacto</th>
                                         <th scope="col">País/Región</th>
                                         <th scope="col">Compañía</th>
@@ -105,55 +128,48 @@
                             </div>
                         </div>
                         <!-- formulario registro -->
-                        <div id="divCreateContact" class="mt-1 hidden">
+                        <div id="divCreateContact" class="mt-3 hidden">
 
                             <div class="card-body">
                                 <h2 class="title">Registro de Contactos</h2>
                                 <form method="POST">
                                     <div class="input-group">
-                                        <input id="inputIdCont" class="input--style-3" type="text" placeholder="Nombre" name="name">
+                                        <input id="inputIdCont" class="input--style-3" type="text" placeholder="Identificación" name="id">
                                     </div>
                                     <div class="input-group">
                                         <input id="inputNameCont" class="input--style-3" type="text" placeholder="Nombre" name="name">
                                     </div>
                                     <div class="input-group">
-                                        <input id="inputlastName" class="input--style-3" type="text" placeholder="Apellido" name="name">
+                                        <input id="inputlastName" class="input--style-3" type="text" placeholder="Apellido" name="lastname">
                                     </div>
                                     <div class="input-group">
                                         <input id="inputEmailCont" class="input--style-3" type="email" placeholder="Email" name="email">
                                     </div>
                                     <div class="input-group">
-                                        <input id="inputCountry" class="input--style-3" type="text" placeholder="País" name="name">
+                                        <div class="btn-group">
+                                            <button id="dropdownCompany" class="btn btn-secondary dropdown-toggle bg-dropdown pl-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Seleccione una compañía
+                                              </button>
+                                            <div id="dpdOptionsCompany" class="dropdown-menu">
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="input-group">
-                                        <input id="inputRegion" class="input--style-3" type="text" placeholder="Región" name="name">
+                                        <input id="inputPositionCont" class="input--style-3" type="text" placeholder="Cargo" name="position">
                                     </div>
                                     <div class="input-group">
-                                        <input id="inputCompany" class="input--style-3" type="text" placeholder="Compañía" name="name">
+                                        <input id="inputCountry" class="input--style-3" type="text" placeholder="País" name="country">
                                     </div>
                                     <div class="input-group">
-                                        <input id="inputPositionCont" class="input--style-3" type="text" placeholder="Cargo" name="name">
+                                        <input id="inputRegion" class="input--style-3" type="text" placeholder="Región" name="region">
                                     </div>
                                     <div class="input-group">
-                                        <input id="inputChannelCont" class="input--style-3" type="text" placeholder="Canal( Facebook, whatsapp, instagram...)" name="name">
+                                        <input id="inputChannelCont" class="input--style-3" type="text" placeholder="Canal( Facebook, whatsapp, instagram...)" name="channel">
                                     </div>
                                     <div class="input-group">
                                         <span class="input--style-3">Interes:</span>
-                                        <input id="inputInterestCont" class="input--style-3" type="range" name="numrango" value="25" min="0" max="100" step="5" placeholder="Interes">
+                                        <input id="inputInterestCont" class="input--style-3" type="range" name="numrango" value="0" min="0" max="100" step="5" placeholder="Interes">
                                         <span id="spanValueInterest" class="input--style-3">0</span>
-                                    </div>
-                                    <div class="input-group">
-                                        <div class="btn-group">
-                                            <button id="inputCityCont" class="btn btn-dark dropdown-toggle align-left bg-dropdown" type="button" id="dropdownCity" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Seleccione una compañía
-                                          </button>
-                                            <div class="dropdown-menu">
-                                                <button class="dropdown-item" type="button">Auxiliar</button>
-                                                <button class="dropdown-item" type="button">Analista</button>
-                                                <button class="dropdown-item" type="button">Coordinador</button>
-                                                <button class="dropdown-item" type="button">Gerente</button>
-                                            </div>
-                                        </div>
                                     </div>
                                     <div class="p-t-10">
                                         <button id="addContact" class="btn1 btn--pill btn--green" type="submit">Registrar</button>
@@ -207,9 +223,25 @@
                         </div>
                         <!-- TABLA -->
                         <div id="tableCompany" class="table-responsive">
-                            <table id="companiesList" class="table">
+                            <div class="row">
+                                <div class="col-9">
+                                    <p id="totalCheck"></p>
+                                </div>
+                                <!--  class="hidden" -->
+                                <div class="col-3" onclick="deleteCompanySelect()" name="btnDeleteSelect">
+                                    <p id="deleteCheckComp" class="pointer hidden"><i class="fas fa-trash"></i> Eliminar compañías
+                                    </p>
+                                </div>
+                            </div>
+                            <table id="companiesList" class="table mt-4">
                                 <thead class="thead-dark">
                                     <tr>
+                                        <th scope="col">
+                                            <div class="form-check">
+                                                <input id="checkboxCompanies" class="form-check-input" type="checkbox" value="" onclick="selectAll(this)" name="check">
+                                                <label class="form-check-label" for="defaultCheck1"></label>
+                                            </div>
+                                        </th>
                                         <th scope="col">NIT</th>
                                         <th scope="col">Nombre</th>
                                         <th scope="col">Teléfono</th>
@@ -246,19 +278,19 @@
                                 <h2 class="title">Registro de Compañías</h2>
                                 <form method="POST">
                                     <div class="input-group">
-                                        <input id="inputNit" class="input--style-3" type="number" placeholder="NIT" name="name">
+                                        <input id="inputNit" class="input--style-3" type="number" placeholder="NIT" name="name" autocomplete="off">
                                     </div>
                                     <div class="input-group">
-                                        <input id="inputName" class="input--style-3" type="text" placeholder="Nombre" name="name">
+                                        <input id="inputName" class="input--style-3" type="text" placeholder="Nombre" name="name" autocomplete="off">
                                     </div>
                                     <div class="input-group">
-                                        <input id="inputPhone" class="input--style-3" type="number" placeholder="Teléfono" name="name">
+                                        <input id="inputPhone" class="input--style-3" type="number" placeholder="Teléfono" name="name" autocomplete="off">
                                     </div>
                                     <div class="input-group">
-                                        <input id="inputEmail" class="input--style-3" type="email" placeholder="Email" name="email">
+                                        <input id="inputEmail" class="input--style-3" type="email" placeholder="Email" name="email" autocomplete="off">
                                     </div>
                                     <div class="input-group">
-                                        <input id="inputAddress" class="input--style-3" type="text" placeholder="Dirección" name="email">
+                                        <input id="inputAddress" class="input--style-3" type="text" placeholder="Dirección" name="address" autocomplete="off">
                                     </div>
                                     <div class="input-group">
                                         <div class="btn-group">
@@ -290,92 +322,128 @@
         <!-- *************************************************************USERS**************************************** -->
         <section id="users" class="hidden">
 
-            <!-- <div class="page-wrapper bg-gra-01 p-t-180 p-b-100 font-poppins"> -->
-            <div class="page-wrapper bg-image  p-t-30 p-b-70 font-poppins">
-                <div class="wrapper wrapper--w780">
-                    <!-- opciones -->
-                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="options" id="optUser2"> Lista usuarios
-                        </label>
-                        <label class="btn btn-secondary active">
-                            <input type="radio" name="options" id="optUser1" checked> Registro
-                        </label>
+            <div class="container mt-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Usuarios</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- BUSQUEDA -->
+                        <div class="row mb-2">
 
-                    </div>
-                    <!-- formulario registro -->
-                    <div id="divCreateUser" class="hidden">
-                        <div class="card-heading"></div>
-                        <div class="card-body">
-                            <h2 class="title">Registro de usuarios</h2>
-                            <form method="POST">
-                                <div class="input-group">
-                                    <input class="input--style-3" type="text" placeholder="Nombre" name="name">
+                            <div id="searchUser" class="col-6">
+                                <div id="userList_filter" class="dataTables_filter">
+                                    <label>Search:
+                                    <input type="search" class="form-control form-control-sm" placeholder="Buscar por nombre" aria-controls="userList">
+                                </label>
                                 </div>
-                                <div class="input-group">
-                                    <input class="input--style-3" type="text" placeholder="Apellido" name="name">
-                                </div>
-                                <div class="input-group">
-                                    <input class="input--style-3" type="email" placeholder="Email" name="email">
-                                </div>
-                                <div class="input-group">
-                                    <div class="btn-group">
-                                        <button class="btn btn-secondary dropdown-toggle bg-dropdown" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Perfil
-                                          </button>
-                                        <div class="dropdown-menu">
-                                            <button class="dropdown-item" type="button">Auxiliar</button>
-                                            <button class="dropdown-item" type="button">Analista</button>
-                                            <button class="dropdown-item" type="button">Coordinador</button>
-                                            <button class="dropdown-item" type="button">Gerente</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-group">
-                                    <input type="password" placeholder="Contraseña" class="input--style-3">
-                                </div>
-                                <div class="input-group">
-                                    <input type="password" placeholder="Confirmar Contraseña" class="input--style-3">
-                                </div>
-                                <div class="p-t-10">
-                                    <button class="btn1 btn--pill btn--green" type="submit">Registrar</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- Listado de usuarios -->
-                    <div id="divGetUsers" class="card">
-                        <div class="card-header">
-                            <h4>Roster</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="userList" class="table">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Nombre</th>
-                                            <th scope="col">Apellido</th>
-                                            <th scope="col">E-mail</th>
-                                            <th scope="col">Perfil</th>
-                                            <th scope="col" class="centerContent">Edit | Elim</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tableUsers">
-                                        <!-- Contenido importado desde la base de datos -->
-                                    </tbody>
-                                </table>
                             </div>
 
+                            <div class="col-6">
+                                <button id="btnCreateUsersForm" type="button" class="btn btn-outline-secondary btn-lg btn-block">Crear nuevo usuario</button>
+                            </div>
                         </div>
+                        <!-- TABLA -->
+                        <div id="divGetUsers" class="table-responsive mt-3">
+                            <div class="row">
+                                <div class="col-9">
+                                    <p id="totalCheckUsers"></p>
+                                </div>
+                                <div class="col-3" onclick="deleteUsersSelect()" name="btnDeleteSelect">
+                                    <p id="deleteCheckUser" class="pointer hidden"><i class="fas fa-trash"></i> Eliminar usuarios</p>
+                                </div>
+                            </div>
+                            <table id="userList" class="table mt-4">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">
+                                            <div class="form-check">
+                                                <input id="checkboxUsers" class="form-check-input" type="checkbox" name="checkUsers" onclick="selectAll(this)">
+                                                <label class="form-check-label" for="defaultCheck1"></label>
+                                            </div>
+                                        </th>
+                                        <th scope="col">Identificación</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Apellido</th>
+                                        <th scope="col">E-mail</th>
+                                        <th scope="col">Administrador</th>
+                                        <th scope="col" class="centerContent">Edit | Elim</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableUsers">
+                                    <!-- Contenido importado desde la base de datos -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- PAGINATION -->
+                        <div id="pageUser" class="row">
+                            <div class="col-sm-12 col-md-5">
+                                <div class="dataTables_info" id="userList_info" role="status" aria-live="polite">Showing 1 to 1 of 1 entries</div>
+                            </div>
+                            <div class="col-sm-12 col-md-7">
+                                <div class="dataTables_paginate paging_simple_numbers" id="userList_paginate">
+                                    <ul class="pagination">
+                                        <li class="paginate_button page-item previous disabled" id="userList_previous"><a href="#" aria-controls="userList" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
+                                        <li class="paginate_button page-item active"><a href="#" aria-controls="userList" data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
+                                        <li class="paginate_button page-item next disabled" id="userList_next"><a href="#" aria-controls="userList" data-dt-idx="2" tabindex="0" class="page-link">Next</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- formulario registro -->
+                        <div id="divCreateUser" class="hidden">
+                            <div class="card-heading"></div>
+                            <div class="card-body">
+                                <h2 class="title">Registro de usuarios</h2>
+                                <form method="POST">
+                                    <div class="input-group">
+                                        <input id="inputUsernameUser" class="input--style-3" type="text" placeholder="Username" name="name" autocomplete="off">
+                                    </div>
+                                    <div class="input-group">
+                                        <input id="inputPasswordUser" type="password" placeholder="Contraseña" class="input--style-3" autocomplete="off">
+                                    </div>
+                                    <div class="input-group">
+                                        <input id="inputConfirmPasswordUser" type="password" placeholder="Confirmar Contraseña" class="input--style-3" autocomplete="off">
+                                    </div>
+                                    <div class="input-group">
+                                        <input id="inputIdUser" class="input--style-3" type="number" placeholder="Identificación" name="name" autocomplete="off">
+                                    </div>
+                                    <div class="input-group">
+                                        <input id="inputNameUser" class="input--style-3" type="text" placeholder="Nombre" name="name" autocomplete="off">
+                                    </div>
+                                    <div class="input-group">
+                                        <input id="inputLastnameUser" class="input--style-3" type="text" placeholder="Apellido" name="name" autocomplete="off">
+                                    </div>
+                                    <div class="input-group">
+                                        <input id="inputEmailUser" class="input--style-3" type="email" placeholder="Email" name="email" autocomplete="off">
+                                    </div>
+                                    <div class="input-group">
+                                        <div class="btn-group">
+                                            <button class="btn btn-secondary dropdown-toggle bg-dropdown" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Seleccione Perfil Administrador
+                                              </button>
+                                            <div class="dropdown-menu">
+                                                <button id="btnAdminTrue" class="dropdown-item" type="button">Si</button>
+                                                <button id="btnAdminFalse" class="dropdown-item" type="button">No</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-t-10">
+                                        <button id="btnCreateUser" class="btn1 btn--pill btn--green" type="submit">Registrar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- Formulario -->
                     </div>
                 </div>
             </div>
+
         </section>
         <!-- *************************************************************REGION**************************************** -->
         <section id="regionCity" class="hidden">
             <!-- hidden -->
-            <div class="container my-5">
+            <div class="container my-5 mt-5">
                 <!-- <button id="btnAddRegion" type="button" class="btn btn-outline-primary m-2">Add Region</button> -->
                 <div class="btn-group">
                     <button id="btnAddRegion" type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -704,6 +772,51 @@
                     </div>
                 </div>
 
+            </div>
+        </section>
+        <!-- *************************************************************LOGIN**************************************** -->
+        <section id="login" class="hidden">
+            <div class="limiter">
+                <div class="container-login100">
+                    <div class="wrap-login100">
+                        <div class="login100-pic js-tilt" data-tilt>
+                            <img src="img/login.gif" alt="IMG" class="borderImg">
+                        </div>
+
+                        <form class="login100-form validate-form">
+                            <span class="login100-form-title">
+                                Member Login
+                            </span>
+
+                            <div class="wrap-input100 validate-input" data-validate="Valid username is required: ex@abc.xyz">
+                                <input id="usernameLogin" class="input100" type="text" name="username" placeholder="username">
+                                <span class="focus-input100"></span>
+                                <span class="symbol-input100">
+                                    <i class="fas fa-user"></i>
+                                    <!-- <i class="fa fa-envelope" aria-hidden="true"></i> -->
+                                </span>
+                            </div>
+
+                            <div class="wrap-input100 validate-input" data-validate="Password is required">
+                                <input id="passwordLogin" class="input100" type="password" name="pass" placeholder="Password">
+                                <span class="focus-input100"></span>
+                                <span class="symbol-input100">
+                                    <i class="fa fa-lock" aria-hidden="true"></i>
+                                </span>
+                            </div>
+
+                            <div class="container-login100-form-btn mb-5">
+                                <button id="btnLoginUsers" class="login100-form-btn" type="submit">
+                                    Login
+                                </button>
+                            </div>
+
+                            <div class="container-login100-form-btn mb-5">
+                                <p id="msgErrorLogin"></p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </section>
 

@@ -1,69 +1,71 @@
 /* ------------------------------------VARIABLES GLOBALES---------------------------------- */
 let divCreateUser = document.getElementById('divCreateUser');
 let divGetUsers = document.getElementById('divGetUsers');
+let btnUsersMenu = document.getElementById('btnUsers');
+let tableUsers = document.getElementById('tableUsers'); //BODY DE LA TABLA
+let btnCreateUser = document.getElementById('btnCreateUser');
 
+/* Campos formulario */
+let inputIdUser = document.getElementById('inputIdUser');
+let inputNameUser = document.getElementById('inputNameUser');
+let inputLastnameUser = document.getElementById('inputLastnameUser');
+let inputEmailUser = document.getElementById('inputEmailUser');
+let btnAdminTrue = document.getElementById('btnAdminTrue');
+let btnAdminFalse = document.getElementById('btnAdminFalse');
+let inputUsernameUser = document.getElementById('inputUsernameUser');
+let inputPasswordUser = document.getElementById('inputPasswordUser');
+let inputConfirmPasswordUser = document.getElementById('inputConfirmPasswordUser');
+
+let btnCreateUsersForm = document.getElementById('btnCreateUsersForm');
+let divSearchUser = document.getElementById('searchUser');
+let divPageUser = document.getElementById('pageUser');
 /* ------------------------------------EVENTOS LISTENER----------------------------------- */
 
-document.getElementById('optUser1').addEventListener('click', showCreateUser);
-document.getElementById('optUser2').addEventListener('click', showGetUsers);
-
-/* ------------------------------------FUNCIONES DE NORMALIZACIÓN------------------------- */
-function showCreateUser() {
-    divCreateUser.classList.add('class', 'card');
-    divCreateUser.classList.add('class', 'card-3');
-    divCreateUser.classList.remove('hidden');
-    divGetUsers.classList.remove('card');
-    divGetUsers.classList.add('hidden');
-}
-
-function showGetUsers() {
-    divGetUsers.classList.remove('hidden');
-    divGetUsers.classList.add('card');
-    divCreateUser.classList.remove('card');
-    divCreateUser.classList.remove('card-3');
-    divCreateUser.classList.add('hidden');
-}
-
+btnUsersMenu.addEventListener('click', btnGetUsers);
+btnCreateUser.addEventListener('click', btnAddUsers);
+btnCreateUsersForm.addEventListener('click', showCreateUser);
 
 /* ------------------------------------FUNCIONES DE CRUD ------------------------- */
 
-function btnAddUsers() {
+async function btnAddUsers(event) {
+    event.preventDefault();
 
-    let url = `http://localhost:3000/v1/createCompany`;
-    fetch(url, {
+    let url = `http://localhost:3000/v1/createUsers`;
+    await fetch(url, {
             method: 'POST',
-            body: `{"nit":"${inputNit.value}","name":"${inputName.value}","phone":"${inputPhone.value}","email":"${inputEmail.value}","address":"${inputAddress.value}","cities_id":"18"}`,
+            body: `{"user_id": "${inputIdUser.value}","username": "${inputUsernameUser.value}","password": "${inputPasswordUser.value}","name": "${inputNameUser.value}","lastName": "${inputLastnameUser.value}","email": "${inputEmailUser.value}","profileAdmin": "0"}`,
             headers: {
                 "Content-Type": "application/json"
             }
         })
         .then((res) => {
-            console.log(res);
-            if (res.status == 201) {
-                res.json().then((data) => {
-                    console.log(data);
-                });
-            } else {
-                alert("Fallo la creación de la compañía");
-            }
+            res.json().then((data) => {
+                if (res.status == 201) {
+                    alert(data.body);
+                } else {
+                    alert(data.error);
+                }
+            });
         })
         .catch(err => console.log(err));
 }
 
 async function btnGetUsers() {
     let arrData;
-    let url = `http://localhost:3000/v1/readCompany`;
+    let is_admin;
+    let url = `http://localhost:3000/v1/readUsers`;
     await fetch(url)
         .then((resp) => resp.json())
         .then(async function(data) {
-            arrData = data.body.readComp;
-            arrAux = data.body.readComp;
-            tableCompanies.innerText = "";
+            arrData = data.body.readUsers;
+            arrAux = data.body.readUsers;
+            tableUsers.innerText = "";
             for (var index = 0; index < arrData.length; index++) {
-
+                is_admin = (arrData[index].profileAdmin == 1) ? true : false;
                 var tr = document.createElement('tr');
-                tr.innerHTML = `<td>${arrData[index].nit}</td><td>${arrData[index].name}</td><td>${arrData[index].phone}</td><td>${arrData[index].email}</td><td>${arrData[index].address}</td><td>${arrData[index].city}</td><td class="centerContent"><a id="u${arrData[index].nit}" onclick="updateCompany(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="d${arrData[index].nit}" onclick="btnDeleteCompany(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
-                tableCompanies.appendChild(tr);
+                tr.innerHTML = `<td><div class="form-check"><input class="form-check-input" type="checkbox" onclick="countCheck(this)" id="ckCont${arrData[index].user_id}" name="checkUsers"></div></td>
+                <td>${arrData[index].user_id}</td><td>${arrData[index].name}</td><td>${arrData[index].lastName}</td><td>${arrData[index].email}</td><td>${is_admin}</td><td class="centerContent"><a id="updUser${arrData[index].user_id}" onclick="updateUser(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="delUser${arrData[index].user_id}" onclick="btnDeleteUser(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
+                tableUsers.appendChild(tr);
             }
             return arrData;
         })
@@ -73,10 +75,10 @@ async function btnGetUsers() {
 
 function btnEditUsers() {
 
-    let url = `http://localhost:3000/v1/updateCompany`;
+    let url = `http://localhost:3000/v1/updateUsers`;
     fetch(url, {
             method: 'PUT',
-            body: `{"nit":"${inputNit.value}","name":"${inputName.value}","phone":"${inputPhone.value}","email":"${inputEmail.value}","address":"${inputAddress.value}","cities_id":"17"}`,
+            body: `{"user_id": "${inputIdUser.value}","username": "${inputUsernameUser.value}","password": "${inputPasswordUser.value}","name": "${inputNameUser.value}","lastName": "${inputLastnameUser.value}","email": "${inputEmailUser.value}","profileAdmin": "0}`,
             headers: { "Content-Type": "application/json" }
         })
         .then((resp) => resp.json())
@@ -84,20 +86,101 @@ function btnEditUsers() {
         .catch(err => console.log(err));
 }
 
-async function btnDeleteUsers(iconDelete) {
-    let nit = iconDelete.id;
-    nit = nit.slice(1, nit.length);
-    let url = `http://localhost:3000/v1/deleteCompany`;
+async function btnDeleteUser(iconDelete) {
+    let user_id = iconDelete.id;
+    user_id = user_id.slice(7, user_id.length);
+    let url = `http://localhost:3000/v1/deleteUsers`;
     await fetch(url, {
             method: 'DELETE',
-            body: `{"nit":"${nit}"}`,
+            body: `{"user_id":"${user_id}"}`,
             headers: {
                 "Content-Type": "application/json"
             }
         })
         .then((resp) => resp.json())
-        .then(res => console.log(res))
+        .then(res => alert(res.body))
         .catch(err => console.log(err));
 
-    btnGetCompanies();
+    btnGetUsers();
 }
+
+async function deleteUsersSelect() {
+    let elements = document.getElementsByName(`checkUsers`);
+
+    for (i = 1; i < elements.length; i++) {
+        let user_id = elements[i].id;
+        user_id = user_id.slice(6, user_id.length);
+        let url = `http://localhost:3000/v1/deleteCompany`;
+
+        if (elements[i].checked) {
+            await fetch(url, {
+                    method: 'DELETE',
+                    body: `{"user_id":"${user_id}"}`,
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then((resp) => resp.json())
+                .then(res => res.body !== "" ? alert(res.body) : alert(res.error))
+                .catch(err => console.log(err));
+        }
+    }
+    btnGetUsers();
+}
+/* ------------------------------------FUNCIONES DE NORMALIZACIÓN------------------------- */
+
+function normalizeForm() {
+    inputIdUser.value = "";
+    inputNameUser.value = "";
+    inputLastnameUser.value = "";
+    inputEmailUser.value = "";
+    inputUsernameUser.value = "";
+    inputPasswordUser.value = "";
+    inputConfirmPasswordUser.value = "";
+}
+
+function showCreateUser() {
+    /* ShowForm */
+    divCreateUser.classList.toggle('card');
+    divCreateUser.classList.toggle('card-3');
+    divCreateUser.classList.toggle('hidden');
+    divGetUsers.classList.toggle('card');
+    divGetUsers.classList.toggle('table-responsive');
+    divGetUsers.classList.toggle('hidden');
+    divSearchUser.classList.toggle('hidden');
+    divPageUser.classList.toggle('row');
+    divPageUser.classList.toggle('hidden');
+    normalizeForm();
+
+    btnCreateUsersForm.innerText = btnCreateUsersForm.innerText == "Crear nuevo usuario" ? btnCreateUsersForm.innerText = "Lista de usuarios" : btnCreateUsersForm.innerText = "Crear nuevo usuario";
+}
+
+function searchValue(id) {
+    let dataToEdit;
+    arrAux.forEach(element => {
+
+        if (element.user_id == id) {
+            dataToEdit = element;
+        }
+    });
+    return dataToEdit;
+}
+
+function updateUser(iconEdit) {
+
+    let user_id = iconEdit.id;
+    user_id = user_id.slice(7, user_id.length);
+    let dataToEdit = searchValue(user_id);
+
+    showCreateUser();
+
+    inputIdUser.value = dataToEdit.user_id;
+    inputIdUser.disabled = true;
+    inputNameUser.value = dataToEdit.name;
+    inputLastnameUser.value = dataToEdit.lastName;
+    inputEmailUser.value = dataToEdit.email;
+    inputUsernameUser.value = dataToEdit.username;
+    inputPasswordUser.value = dataToEdit.password;
+}
+
+function updateSite() { /* location.reload(); */ window.location.href = window.location.href; }

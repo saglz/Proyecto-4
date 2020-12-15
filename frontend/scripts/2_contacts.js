@@ -13,15 +13,17 @@ let pageContact = document.getElementById('pageContact');
 let btnCreateContact = document.getElementById('btnCreateContact');
 let divCreateContact = document.getElementById('divCreateContact');
 let btnUpdateContact = document.getElementById('btnUpdateContact');
+let btnExportContact = document.getElementById('btnExportContact');
 
-
-/* Campos formulario */
-/* let inputNit = document.getElementById('inputNit');
-let inputName = document.getElementById('inputName');
-let inputPhone = document.getElementById('inputPhone');
-let inputEmail = document.getElementById('inputEmail');
-let inputAddress = document.getElementById('inputAddress'); */
-/* let inputCiudad = document.getElementById('btnCompanies'); */
+let btnDropdownCompany = document.getElementById('dropdownCompany')
+    /* Campos formulario */
+let inputIdCont = document.getElementById('inputIdCont');
+let inputNameCont = document.getElementById('inputNameCont');
+let inputlastName = document.getElementById('inputlastName');
+let inputEmailCont = document.getElementById('inputEmailCont');
+let inputPositionCont = document.getElementById('inputPositionCont');
+let inputChannelCont = document.getElementById('inputChannelCont');
+let inputInterestCont = document.getElementById('inputInterestCont');
 
 /* ------------------------------------EVENTOS LISTENER----------------------------------- */
 
@@ -34,28 +36,33 @@ deleteContact.addEventListener('click', btnDeleteContact); */
 btnCreateContact.addEventListener('click', showCreateContact);
 btnUpdateContact.addEventListener('click', btnEditContact);
 
+btnDropdownCompany.addEventListener('click', btnGetCompaniesOptions);
+inputInterestCont.addEventListener('change', setValueInterest);
+
 
 /* ------------------------------------FUNCIONES DE CRUD ------------------------- */
 
-function btnAddContact() {
+function btnAddContact(event) {
+    event.preventDefault();
 
     let url = `http://localhost:3000/v1/createContacts`;
     fetch(url, {
             method: 'POST',
-            body: `{"id":"${inputIdCont.value}","name":"${inputNameCont.value}","lastName":"${inputName.value}","email":"${inputEmailCont.value}","position":"${inputPositionCont.value}","channel":"${inputChannelCont.value}","companies_id":"1"}`,
+            body: `{"id":"${inputIdCont.value}","name":"${inputNameCont.value}","lastName":"${inputlastName.value}","email":"${inputEmailCont.value}","position":"${inputPositionCont.value}","channel":"${inputChannelCont.value}","interest":"${inputInterestCont.value}","companies_id":"${dpdId}"}`,
             headers: {
                 "Content-Type": "application/json"
             }
         })
         .then((res) => {
-            console.log(res);
-            if (res.status == 201) {
-                res.json().then((data) => {
-                    console.log(data);
-                });
-            } else {
-                alert("Fallo la creación de la compañía");
-            }
+            res.json().then((data) => {
+                if (res.status == 201) {
+                    alert(data.body);
+                    showCreateContact();
+
+                } else {
+                    alert(data.error);
+                }
+            });
         })
         .catch(err => console.log(err));
 }
@@ -63,22 +70,46 @@ function btnAddContact() {
 async function btnGetContacts() {
     let arrData;
     let url = `http://localhost:3000/v1/readContacts`;
-    await fetch(url)
+    await fetch(url, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                /* 'Authorization': `Bearer ${token}` */
+            }
+        })
         .then((resp) => resp.json())
         .then(async function(data) {
             arrData = data.body.readCont;
-            /* arrAux = data.body.readCont; */
+            arrAux = data.body.readCont;
             tableContact.innerText = "";
             for (var index = 0; index < arrData.length; index++) {
 
                 var tr = document.createElement('tr');
-                tr.innerHTML = `<td>${arrData[index].name} ${arrData[index].lastName}<br>${arrData[index].email}</td><td>${arrData[index].country}<br>${arrData[index].region}</td><td>${arrData[index].company}</td><td>${arrData[index].position}</td><td>${arrData[index].channel}</td><td>${arrData[index].interest}%</td><td class="centerContent"><a id="u${arrData[index].id}" onclick="updateContact(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="d${arrData[index].id}" onclick="btnDeleteContact(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
+                tr.innerHTML = `<td><div class="form-check"><input class="form-check-input" type="checkbox" onclick="countCheck(this)"  name="checkContacts" id="ckCont${arrData[index].id}"></div></td>
+            <td>${arrData[index].name} ${arrData[index].lastName}<br>${arrData[index].email}</td><td>${arrData[index].country}<br>${arrData[index].region}</td><td>${arrData[index].company}</td><td>${arrData[index].position}</td><td>${arrData[index].channel}</td><td>${arrData[index].interest}%</td><td class="centerContent"><a id="u${arrData[index].id}" onclick="updateContact(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="d${arrData[index].id}" onclick="btnDeleteContact(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
                 tableContact.appendChild(tr);
             }
             return arrData;
         })
         .catch(err => console.log(err));
+}
 
+async function btnGetCompaniesOptions() {
+    let arrData;
+    let url = `http://localhost:3000/v1/readCompany`;
+    await fetch(url, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then((resp) => resp.json())
+        .then((data) => {
+            arrData = data.body.readComp;
+            createOptionsDropdown(arrData);
+
+        })
+        .catch(err => console.log(err));
 }
 
 function btnEditContact() {
@@ -106,28 +137,54 @@ async function btnDeleteContact(iconDelete) {
             }
         })
         .then((resp) => resp.json())
-        .then(res => console.log(res))
+        .then(res => res.body !== "" ? alert(res.body) : alert(res.error))
         .catch(err => console.log(err));
 
     btnGetContacts();
 }
 
+async function deleteContactSelect() {
+    let elements = document.getElementsByName(`checkContacts`);
+
+    for (i = 1; i < elements.length; i++) {
+
+        if (elements[i].checked) {
+
+            let id = elements[i].id;
+            id = id.slice(6, id.length);
+
+            let url = `http://localhost:3000/v1/deleteContacts`;
+            await fetch(url, {
+                    method: 'DELETE',
+                    body: `{"id":"${id}"}`,
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then((resp) => resp.json())
+                .then(res => res.body !== "" ? alert(res.body) : alert(res.error))
+                .catch(err => console.log(err));
+        }
+    }
+    btnGetContacts();
+}
 
 /* ------------------------------------FUNCIONES DE NORMALIZACIÓN------------------------- */
 
 function showCreateContact() {
     normalizeFormContact();
     searchContact.classList.toggle('hidden');
-    tableContact.classList.toggle('hidden');
+    tableContacts.classList.toggle('hidden');
     pageContact.classList.toggle('hidden');
     divCreateContact.classList.toggle('hidden');
+    btnExportContact.classList.toggle('hidden');
     divCreateContact.classList.toggle('card');
     divCreateContact.classList.toggle('card-3');
     pageContact.classList.toggle('row');
 
-    btnCreateCompany.innerText === "Crear nueva compañía" ? btnCreateCompany.innerText = "Lista de compañías" : btnCreateCompany.innerText = "Crear nueva compañía";
+    btnCreateContact.innerText == "Agregar contacto" ? btnCreateContact.innerText = "Lista de contactos" : btnCreateContact.innerText = "Agregar contacto";
 
-    btnGetCompanies();
+    btnGetContacts();
 }
 
 function showUpdateContact() {
@@ -171,8 +228,16 @@ function updateContact(iconEdit) {
 function normalizeFormContact() {
     inputIdCont.value = "";
     inputNameCont.value = "";
-    inputName.value = "";
+    inputlastName.value = "";
     inputEmailCont.value = "";
     inputPositionCont.value = "";
     inputChannelCont.value = "";
+    inputInterestCont.value = 0;
+    spanValueInterest.innerText = 0;
+    btnDropdownCompany.innerText = "Seleccione una compañía";
+}
+
+function setValueInterest() {
+    let spanValueInterest = document.getElementById('spanValueInterest');
+    spanValueInterest.innerText = inputInterestCont.value;
 }

@@ -112,7 +112,7 @@ exports.delete = async(req, res, table, condWhereTable, idWhere) => {
                 queryResult = false;
             }
         }).catch(err => {
-            response.error(req, res, 'Error borrando producto', 400, err);
+            response.error(req, res, `Error eliminando la identificación ${idWhere}(${table}) porque esta asociado a otros datos`, 400, err);
         });
     return queryResult;
 }

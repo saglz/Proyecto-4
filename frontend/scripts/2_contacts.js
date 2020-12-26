@@ -1,5 +1,5 @@
 /* ------------------------------------VARIABLES GLOBALES---------------------------------- */
-/* let arrAux = []; */
+let token = localStorage.token;
 
 let addContact = document.getElementById('addContact'); //btn de Registro    C
 let getContact = document.getElementById('btnContacts'); //                     R
@@ -50,7 +50,8 @@ function btnAddContact(event) {
             method: 'POST',
             body: `{"id":"${inputIdCont.value}","name":"${inputNameCont.value}","lastName":"${inputlastName.value}","email":"${inputEmailCont.value}","position":"${inputPositionCont.value}","channel":"${inputChannelCont.value}","interest":"${inputInterestCont.value}","companies_id":"${dpdId}"}`,
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
             }
         })
         .then((res) => {
@@ -74,7 +75,7 @@ async function btnGetContacts() {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
-                /* 'Authorization': `Bearer ${token}` */
+                'Authorization': `Bearer ${token}`
             }
         })
         .then((resp) => resp.json())
@@ -100,7 +101,8 @@ async function btnGetCompaniesOptions() {
     await fetch(url, {
             method: 'GET',
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
             }
         })
         .then((resp) => resp.json())
@@ -112,16 +114,20 @@ async function btnGetCompaniesOptions() {
         .catch(err => console.log(err));
 }
 
-function btnEditContact() {
+function btnEditContact(event) {
+    event.preventDefault();
 
     let url = `http://localhost:3000/v1/updateContacts`;
     fetch(url, {
             method: 'PUT',
-            body: `{"nit":"${inputNit.value}","name":"${inputName.value}","phone":"${inputPhone.value}","email":"${inputEmail.value}","address":"${inputAddress.value}","cities_id":"17"}`,
-            headers: { "Content-Type": "application/json" }
+            body: `{"id":"${inputIdCont.value}","name":"${inputNameCont.value}","lastName":"${inputlastName.value}","email":"${inputEmailCont.value}","position":"${inputPositionCont.value}","channel":"${inputChannelCont.value}","interest":"${inputInterestCont.value}","companies_id":"${dpdId}"}`,
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            }
         })
         .then((resp) => resp.json())
-        .then(res => console.log(res))
+        .then(res => res.body !== "" ? alert(res.body) : alert(res.error))
         .catch(err => console.log(err));
 }
 
@@ -133,7 +139,8 @@ async function btnDeleteContact(iconDelete) {
             method: 'DELETE',
             body: `{"id":"${id}"}`,
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
             }
         })
         .then((resp) => resp.json())
@@ -158,7 +165,8 @@ async function deleteContactSelect() {
                     method: 'DELETE',
                     body: `{"id":"${id}"}`,
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        'Authorization': `Bearer ${token}`
                     }
                 })
                 .then((resp) => resp.json())
@@ -198,31 +206,49 @@ function showUpdateContact() {
     addCompany.classList.toggle('hidden');
 }
 
-function searchValue(nit) {
+/* function searchValue(id) {
     let dataToEdit;
     arrAux.forEach(element => {
 
-        if (element.nit == nit) {
+        if (element.id == id) {
             dataToEdit = element;
         }
     });
     return dataToEdit;
-}
+} */
 
 function updateContact(iconEdit) {
 
-    let nit = iconEdit.id;
-    nit = nit.slice(1, nit.length);
-    let dataToEdit = searchValue(nit);
+    let id = iconEdit.id;
+    id = id.slice(1, id.length);
 
+    let dataToEdit;
+    arrAux.forEach(element => {
+
+        if (element.id == id) {
+            dataToEdit = element;
+        }
+    });
     showCreateContact();
 
-    inputNit.value = dataToEdit.nit;
-    inputName.value = dataToEdit.name;
-    inputPhone.value = dataToEdit.phone;
-    inputEmail.value = dataToEdit.email;
-    inputAddress.value = dataToEdit.address;
+    inputIdCont.value = dataToEdit.id;
+    inputNameCont.value = dataToEdit.name;
+    inputlastName.value = dataToEdit.lastName;
+    inputEmailCont.value = dataToEdit.email;
+    btnDropdownCompany.innerText = dataToEdit.company;
+    inputPositionCont.value = dataToEdit.position;
+    inputCountry.value = dataToEdit.country;
+    inputRegion.value = dataToEdit.region;
+    inputChannelCont.value = dataToEdit.channel;
+    inputInterestCont.value = dataToEdit.interest;
+    spanValueInterest.innerText = dataToEdit.interest;
     showUpdateContact();
+
+    addContact.classList.remove("btn1", "btn--pill", "btn--green");
+    addContact.classList.add("hidden");
+    btnUpdateContact.classList.remove('hidden');
+    btnUpdateContact.classList.add("btn1", "btn--pill", "btn--green");
+
 }
 
 function normalizeFormContact() {

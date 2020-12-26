@@ -1,3 +1,4 @@
+DROP DATABASE ACA_ESTA_EL_PROYECTO4;
 CREATE DATABASE ACA_ESTA_EL_PROYECTO4;
 USE ACA_ESTA_EL_PROYECTO4;
 
@@ -21,7 +22,7 @@ CREATE TABLE countries (
   countries_id INT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR (150) NOT NULL,
   region_id INT NOT NULL DEFAULT "0",
-  FOREIGN KEY(region_id) REFERENCES region(region_id)
+  FOREIGN KEY(region_id) REFERENCES region(region_id) ON DELETE CASCADE
 );
 
 INSERT INTO
@@ -42,7 +43,7 @@ CREATE TABLE cities (
   cities_id INT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR (150) NOT NULL,
   countries_id INT NOT NULL DEFAULT "0",
-  FOREIGN KEY(countries_id) REFERENCES countries(countries_id)
+  FOREIGN KEY(countries_id) REFERENCES countries(countries_id) ON DELETE CASCADE
 );
 
 -- Populate orders table
@@ -121,6 +122,9 @@ CREATE TABLE users (
 );
 
 INSERT INTO
-  contacts
+  users
 VALUES
-  (NULL, 123, "omarGarita", "1234", "Omar", "Garita", "omar@mail.com", 1);
+  (NULL, 123, "omarGarita", "1234", "Omar", "Garita", "omar@mail.com", 0),
+  (NULL, 123, "admin", "1234", "Gerente", "Compañía", "gerente@mail.com", 1),
+  (NULL, 123, "santiago", "1234", "Santiago", "Arias", "santi.arias@mail.com", 1),
+  (NULL, 123, "juan", "1234", "Juan", "laverde", "laverde@mail.com", 0);

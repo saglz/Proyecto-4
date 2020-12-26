@@ -1,9 +1,8 @@
 const sequelize = require('../../store/conexionMysql');
 const querys = require('../../store/querys');
 const response = require('../../network/response');
+const { createToken } = require('../../auth/security');
 
-const jwt = require('jsonwebtoken');
-const { SECRET } = process.env;
 /* ---------------------------------------------CREATE CONTACTS -----------------------------------------------------*/
 const createUsers = async(req, res) => {
     let { user_id, username, password, name, lastName, email, profileAdmin } = req.body;
@@ -49,7 +48,6 @@ const loginUsers = async(req, res) => {
             email: payload[0].email,
             profileAdmin: payload[0].profileAdmin
         };
-
         createToken(req, res, sendpayload);
     } else {
         response.error(req, res, 'Usuario o contraseña invalidos', 400, 'Error en el login,no existen usario o contraseña en la BD');
@@ -89,32 +87,10 @@ const deleteUsers = async(req, res) => {
     };
 };
 
-/* --------------------------------------------- METODOS GENERALES -----------------------------------------------------*/
-const createToken = (req, res, payload) => {
-    try {
-        const token = jwt.sign(payload, SECRET);
-        response.success(req, res, { token }, 200);
-    } catch (error) {
-        response.error(req, res, "No se pudo generar token", 401, error);
-    }
-}
-
-const validateToken = (req, res, next) => {
-    try {
-        const token = req.headers.authorization.split(' ')[1];
-        const verification = jwt.verify(token, SECRET);
-        req.token_info = verification;
-        next();
-    } catch (error) {
-        response.error(req, res, "token no válido", 401, error);
-    }
-}
-
 module.exports = {
     createUsers,
     readUsers,
     updateUsers,
     deleteUsers,
-    loginUsers,
-    validateToken
+    loginUsers
 }

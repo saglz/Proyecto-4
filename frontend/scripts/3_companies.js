@@ -22,6 +22,12 @@ let inputPhone = document.getElementById('inputPhone');
 let inputEmail = document.getElementById('inputEmail');
 let inputAddress = document.getElementById('inputAddress');
 
+inputNit.value = "";
+inputName.value = "";
+inputPhone.value = "";
+inputEmail.value = "";
+inputAddress
+
 /* ------------------------------------EVENTOS LISTENER----------------------------------- */
 
 /* CRUD */
@@ -44,7 +50,8 @@ async function btnAddCompanies(event) {
             method: 'POST',
             body: `{"nit":"${inputNit.value}","name":"${inputName.value}","phone":"${inputPhone.value}","email":"${inputEmail.value}","address":"${inputAddress.value}","cities_id":"18"}`,
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
             }
         })
         .then((res) => {
@@ -65,7 +72,13 @@ async function btnAddCompanies(event) {
 async function btnGetCompanies() {
     let arrData;
     let url = `http://localhost:3000/v1/readCompany`;
-    await fetch(url)
+    await fetch(url, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            }
+        })
         .then((resp) => resp.json())
         .then(async function(data) {
             arrData = data.body.readComp;
@@ -90,7 +103,10 @@ function btnEditCompany() {
     fetch(url, {
             method: 'PUT',
             body: `{"nit":"${inputNit.value}","name":"${inputName.value}","phone":"${inputPhone.value}","email":"${inputEmail.value}","address":"${inputAddress.value}","cities_id":"17"}`,
-            headers: { "Content-Type": "application/json" }
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            }
         })
         .then((resp) => resp.json())
         .then(res => console.log(res))
@@ -105,7 +121,8 @@ async function btnDeleteCompany(iconDelete) {
             method: 'DELETE',
             body: `{"nit":"${nit}"}`,
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
             }
         })
         .then((resp) => resp.json())
@@ -128,7 +145,8 @@ async function deleteCompanySelect() {
                     method: 'DELETE',
                     body: `{"nit":"${nit}"}`,
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        'Authorization': `Bearer ${token}`
                     }
                 })
                 .then((resp) => resp.json())
@@ -141,7 +159,7 @@ async function deleteCompanySelect() {
 /* ------------------------------------FUNCIONES DE NORMALIZACIÓN------------------------- */
 
 function showCreateCompany() {
-    normalizeForm();
+    normalizeFormCompany();
     searchCompany.classList.toggle('hidden');
     tableCompany.classList.toggle('hidden');
     pageCompany.classList.toggle('hidden');
@@ -151,6 +169,11 @@ function showCreateCompany() {
     pageCompany.classList.toggle('row');
 
     btnCreateCompany.innerText === "Crear nueva compañía" ? btnCreateCompany.innerText = "Lista de compañías" : btnCreateCompany.innerText = "Crear nueva compañía";
+
+    btnUpdateCompany.classList.remove('btn1', 'btn--pill', 'btn--blue');
+    btnUpdateCompany.classList.add('hidden');
+    addCompany.classList.add('btn1', 'btn--pill', 'btn--green');
+    addCompany.classList.remove('hidden');
 
     btnGetCompanies();
 }
@@ -167,21 +190,20 @@ function showUpdateCompany() {
 }
 
 function searchValue(nit) {
+
+    return { dataToEdit };
+}
+
+async function updateCompany(iconEdit) {
+
+    let nit = iconEdit.id;
+    nit = nit.slice(1, nit.length);
     let dataToEdit;
     arrAux.forEach(element => {
-
         if (element.nit == nit) {
             dataToEdit = element;
         }
     });
-    return dataToEdit;
-}
-
-function updateCompany(iconEdit) {
-
-    let nit = iconEdit.id;
-    nit = nit.slice(1, nit.length);
-    let dataToEdit = searchValue(nit);
 
     showCreateCompany();
 
@@ -193,7 +215,7 @@ function updateCompany(iconEdit) {
     showUpdateCompany();
 }
 
-function normalizeForm() {
+function normalizeFormCompany() {
     inputNit.value = "";
     inputName.value = "";
     inputPhone.value = "";

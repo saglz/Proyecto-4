@@ -31,19 +31,19 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a id="btnContacts" class="nav-link active" href="#contacts">Contactos</a>
+                        <a id="btnContacts" class="nav-link" href="#contacts">Contactos</a>
                     </li>
                     <li class="nav-item">
                         <a id="btnCompanies" class="nav-link" href="#companies">Compañía</a>
                     </li>
-                    <li class="nav-item">
+                    <li id="usersAdmin" class="nav-item">
                         <a id="btnUsers" class="nav-link" href="#users">Usuarios</a>
                     </li>
                     <li class="nav-item">
                         <a id="btnRegion" class="nav-link" href="#regionCity">Región/Ciudad</a>
                     </li>
                     <li class="nav-item">
-                        <a id="btnLogin" class="nav-link" href="#Login">Login</a>
+                        <a id="btnLogin" class="nav-link active" href="#Login">Login</a>
                     </li>
                 </ul>
             </div>
@@ -174,16 +174,16 @@
                                     <div class="p-t-10">
                                         <button id="addContact" class="btn1 btn--pill btn--green" type="submit">Registrar</button>
                                     </div>
-                                    <div class="p-t-10">
+                                    <divclass="p-t-10">
                                         <button id="btnUpdateContact" class="hidden" type="submit">Actualizar</button>
-                                    </div>
-                                </form>
                             </div>
-
+                            </form>
                         </div>
 
                     </div>
+
                 </div>
+            </div>
             </div>
 
         </section>
@@ -297,11 +297,7 @@
                                             <button id="inputCity" class="btn btn-dark dropdown-toggle align-left bg-dropdown" type="button" id="dropdownCity" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             Ciudad
                                           </button>
-                                            <div class="dropdown-menu">
-                                                <button class="dropdown-item" type="button">Auxiliar</button>
-                                                <button class="dropdown-item" type="button">Analista</button>
-                                                <button class="dropdown-item" type="button">Coordinador</button>
-                                                <button class="dropdown-item" type="button">Gerente</button>
+                                            <div id="dpdCitiesCompanies" class="dropdown-menu">
                                             </div>
                                         </div>
                                     </div>
@@ -833,6 +829,7 @@
     <script src="scripts/3_companies.js"></script>
     <script src="scripts/4_users.js"></script>
     <script src="scripts/5_regions.js"></script>
+    <script src="scripts/6_login.js"></script>
 </body>
 
 </html>

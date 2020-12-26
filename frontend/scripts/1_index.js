@@ -52,7 +52,7 @@ function btnRegionChange() {
 
 function btnLoginChange() {
     resetActive();
-    secLogin.classList.add('active');
+    btnLogin.classList.add('active');
     secHidden();
     secLogin.classList.remove('hidden');
 }
@@ -71,6 +71,7 @@ function resetActive() {
     btnCompanies.classList.remove('active');
     btnUsers.classList.remove('active');
     btnRegion.classList.remove('active');
+    btnLogin.classList.remove('active');
 
     deleteCheck.classList.add('hidden');
     deleteCheckComp.classList.add('hidden');
@@ -83,7 +84,9 @@ function resetActive() {
 
 /* CUANDO LA PAGINA CARGUE */
 window.onload = function() {
-    btnGetContacts();
+    /* btnGetContacts(); */
+    btnLoginChange();
+    localStorage.clear();
 };
 
 /* SELECT ALL CHECKBOX */

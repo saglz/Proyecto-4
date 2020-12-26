@@ -35,7 +35,8 @@ async function btnAddUsers(event) {
             method: 'POST',
             body: `{"user_id": "${inputIdUser.value}","username": "${inputUsernameUser.value}","password": "${inputPasswordUser.value}","name": "${inputNameUser.value}","lastName": "${inputLastnameUser.value}","email": "${inputEmailUser.value}","profileAdmin": "0"}`,
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
             }
         })
         .then((res) => {
@@ -54,9 +55,16 @@ async function btnGetUsers() {
     let arrData;
     let is_admin;
     let url = `http://localhost:3000/v1/readUsers`;
-    await fetch(url)
+    await fetch(url, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            }
+        })
         .then((resp) => resp.json())
         .then(async function(data) {
+
             arrData = data.body.readUsers;
             arrAux = data.body.readUsers;
             tableUsers.innerText = "";
@@ -68,6 +76,8 @@ async function btnGetUsers() {
                 tableUsers.appendChild(tr);
             }
             return arrData;
+
+
         })
         .catch(err => console.log(err));
 
@@ -79,7 +89,10 @@ function btnEditUsers() {
     fetch(url, {
             method: 'PUT',
             body: `{"user_id": "${inputIdUser.value}","username": "${inputUsernameUser.value}","password": "${inputPasswordUser.value}","name": "${inputNameUser.value}","lastName": "${inputLastnameUser.value}","email": "${inputEmailUser.value}","profileAdmin": "0}`,
-            headers: { "Content-Type": "application/json" }
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            }
         })
         .then((resp) => resp.json())
         .then(res => console.log(res))
@@ -94,7 +107,8 @@ async function btnDeleteUser(iconDelete) {
             method: 'DELETE',
             body: `{"user_id":"${user_id}"}`,
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
             }
         })
         .then((resp) => resp.json())
@@ -117,7 +131,8 @@ async function deleteUsersSelect() {
                     method: 'DELETE',
                     body: `{"user_id":"${user_id}"}`,
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        'Authorization': `Bearer ${token}`
                     }
                 })
                 .then((resp) => resp.json())

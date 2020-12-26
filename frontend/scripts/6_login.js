@@ -4,13 +4,15 @@ const passwordLogin = document.getElementById('passwordLogin');
 
 const btnLoginUsers = document.getElementById('btnLoginUsers');
 
+const liUsersAdmin = document.getElementById('usersAdmin');
+
 /* ------------------------------------EVENTOS LISTENER----------------------------------- */
 
-btnLoginUsers.addEventListener('click', btnLoginUsers);
+btnLoginUsers.addEventListener('click', validateLogin);
 
 /* ------------------------------------FUNCIONES DE NORMALIZACIÓN------------------------- */
 
-function btnLoginUsers(event) {
+async function validateLogin(event) {
     event.preventDefault();
 
     let url = `http://localhost:3000/v1/login`;
@@ -23,12 +25,27 @@ function btnLoginUsers(event) {
         })
         .then((res) => {
             res.json().then((data) => {
-                if (res.status == 201) {
-                    alert(data.body);
+                if (res.status == 200) {
+                    localStorage.setItem("token", data.body.token);
+                    localStorage.setItem("user", data.body.is_admin);
+
+                    if (localStorage.user == 1) {
+                        liUsersAdmin.classList.remove('hidden');
+                    } else {
+                        liUsersAdmin.classList.add('hidden');
+                    }
+                    clearFormLogin();
+                    btnContactsChange();
+                    btnGetContacts();
                 } else {
                     alert(data.error);
                 }
             });
         })
         .catch(err => console.log(err));
+}
+
+function clearFormLogin() {
+    usernameLogin.value = "";
+    passwordLogin.value = "";
 }

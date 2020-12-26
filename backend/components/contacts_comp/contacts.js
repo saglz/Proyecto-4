@@ -37,7 +37,7 @@ const updateContacts = async(req, res) => {
     let { id, name, lastName, email, position, channel, interest, companies_id } = req.body;
 
     await sequelize.query(`UPDATE contacts 
-    SET name='${name}',lastName='${lastName}',email='${email}',position='${position}',channel='${channel}',interest=${interest}, companies=${companies_id}
+    SET name='${name}',lastName='${lastName}',email='${email}',position='${position}',channel='${channel}',interest=${interest}, companies_id=${companies_id}
     WHERE id=${id}`)
         .then(result => {
             if (result[1] == 0) {

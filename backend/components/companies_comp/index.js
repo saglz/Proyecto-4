@@ -5,9 +5,9 @@ const { validateToken, validateUser } = require('../../auth/security');
 const { createCompany, readCompany, updateCompany, deleteCompany } = require('./company');
 const { controllerCompany } = require('./controller');
 
-companiesRouter.post('/createCompany', controllerCompany, createCompany);
-companiesRouter.get('/readCompany', readCompany);
-companiesRouter.put('/updateCompany', controllerCompany, updateCompany);
-companiesRouter.delete('/deleteCompany', deleteCompany);
+companiesRouter.post('/createCompany', validateToken, controllerCompany, createCompany);
+companiesRouter.get('/readCompany', validateToken, readCompany);
+companiesRouter.put('/updateCompany', validateToken, controllerCompany, updateCompany);
+companiesRouter.delete('/deleteCompany', validateToken, deleteCompany);
 
 module.exports = companiesRouter;

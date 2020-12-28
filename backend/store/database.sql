@@ -125,6 +125,6 @@ INSERT INTO
   users
 VALUES
   (NULL, 123, "omarGarita", "1234", "Omar", "Garita", "omar@mail.com", 0),
-  (NULL, 123, "admin", "1234", "Gerente", "Compañía", "gerente@mail.com", 1),
-  (NULL, 123, "santiago", "1234", "Santiago", "Arias", "santi.arias@mail.com", 1),
-  (NULL, 123, "juan", "1234", "Juan", "laverde", "laverde@mail.com", 0);
+  (NULL, 456, "admin", "1234", "Gerente", "Compañía", "gerente@mail.com", 1),
+  (NULL, 111, "santiago", "1234", "Santiago", "Arias", "santi.arias@mail.com", 1),
+  (NULL, 222, "juan", "1234", "Juan", "laverde", "laverde@mail.com", 0);

@@ -114,15 +114,21 @@
                         </div>
 
                         <div id="pageContact" class="row">
-                            <div class="col-sm-12 col-md-5">
-                                <div class="dataTables_info" id="userList_info" role="status" aria-live="polite">Showing 1 to 1 of 1 entries</div>
+                            <div id="contactsList" class="col-sm-12 col-md-5">
+                                <label>Mostrar
+                                    <select id="quantityContact" name="contactsList" aria-controls="userList" class="custom-select custom-select-sm form-control form-control-sm">
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                    </select> Contactos
+                                </label>
                             </div>
                             <div class="col-sm-12 col-md-7">
                                 <div class="dataTables_paginate paging_simple_numbers" id="userList_paginate">
                                     <ul class="pagination">
-                                        <li class="paginate_button page-item previous disabled" id="userList_previous"><a href="#" aria-controls="userList" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
+                                        <li id="backContacts" class="paginate_button page-item previous disabled"><a href="#" aria-controls="userList" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
                                         <li class="paginate_button page-item active"><a href="#" aria-controls="userList" data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
-                                        <li class="paginate_button page-item next disabled" id="userList_next"><a href="#" aria-controls="userList" data-dt-idx="2" tabindex="0" class="page-link">Next</a></li>
+                                        <li id="nextContacts" class="paginate_button page-item next disabled"><a href="#" aria-controls="userList" data-dt-idx="2" tabindex="0" class="page-link">Next</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -209,16 +215,7 @@
 
                             <div class="col-6">
                                 <button id="btnCreateCompany" type="button" class="btn btn-outline-secondary btn-lg btn-block">Crear nueva compañía</button>
-                                <!-- <div class="dataTables_length" id="userList_length">
-                                    <label>Show 
-                                        <select name="userList_length" aria-controls="userList" class="custom-select custom-select-sm form-control form-control-sm">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select> entries
-                                    </label>
-                                </div> -->
+
                             </div>
                         </div>
                         <!-- TABLA -->
@@ -258,8 +255,14 @@
                         </div>
 
                         <div id="pageCompany" class="row">
-                            <div class="col-sm-12 col-md-5">
-                                <div class="dataTables_info" id="userList_info" role="status" aria-live="polite">Showing 1 to 1 of 1 entries</div>
+                            <div id="companyList" class="col-sm-12 col-md-5">
+                                <label>Mostrar
+                                    <select name="companyList" aria-controls="userList" class="custom-select custom-select-sm form-control form-control-sm">
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                    </select> Compañías
+                                </label>
                             </div>
                             <div class="col-sm-12 col-md-7">
                                 <div class="dataTables_paginate paging_simple_numbers" id="userList_paginate">
@@ -373,8 +376,14 @@
                         </div>
                         <!-- PAGINATION -->
                         <div id="pageUser" class="row">
-                            <div class="col-sm-12 col-md-5">
-                                <div class="dataTables_info" id="userList_info" role="status" aria-live="polite">Showing 1 to 1 of 1 entries</div>
+                            <div id="companyList" class="col-sm-12 col-md-5">
+                                <label>Mostrar
+                                    <select name="companyList" aria-controls="userList" class="custom-select custom-select-sm form-control form-control-sm">
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                    </select> Usuarios
+                                </label>
                             </div>
                             <div class="col-sm-12 col-md-7">
                                 <div class="dataTables_paginate paging_simple_numbers" id="userList_paginate">
@@ -399,9 +408,6 @@
                                         <input id="inputPasswordUser" type="password" placeholder="Contraseña" class="input--style-3" autocomplete="off">
                                     </div>
                                     <div class="input-group">
-                                        <input id="inputConfirmPasswordUser" type="password" placeholder="Confirmar Contraseña" class="input--style-3" autocomplete="off">
-                                    </div>
-                                    <div class="input-group">
                                         <input id="inputIdUser" class="input--style-3" type="number" placeholder="Identificación" name="name" autocomplete="off">
                                     </div>
                                     <div class="input-group">
@@ -415,12 +421,12 @@
                                     </div>
                                     <div class="input-group">
                                         <div class="btn-group">
-                                            <button class="btn btn-secondary dropdown-toggle bg-dropdown" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button id="dropdownMenu2" class="btn btn-secondary dropdown-toggle bg-dropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 Seleccione Perfil Administrador
                                               </button>
                                             <div class="dropdown-menu">
-                                                <button id="btnAdminTrue" class="dropdown-item" type="button">Si</button>
-                                                <button id="btnAdminFalse" class="dropdown-item" type="button">No</button>
+                                                <button id="btnAdminTrue" class="dropdown-item" type="button" onclick="optClickAdmin(this)">Si</button>
+                                                <button id="btnAdminFalse" class="dropdown-item" type="button" onclick="optClickAdmin(this)">No</button>
                                             </div>
                                         </div>
                                     </div>

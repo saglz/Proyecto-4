@@ -1,4 +1,5 @@
 /* ------------------------------------VARIABLES GLOBALES---------------------------------- */
+token = localStorage.getItem('token');
 let divCreateUser = document.getElementById('divCreateUser');
 let divGetUsers = document.getElementById('divGetUsers');
 let btnUsersMenu = document.getElementById('btnUsers');
@@ -14,7 +15,7 @@ let btnAdminTrue = document.getElementById('btnAdminTrue');
 let btnAdminFalse = document.getElementById('btnAdminFalse');
 let inputUsernameUser = document.getElementById('inputUsernameUser');
 let inputPasswordUser = document.getElementById('inputPasswordUser');
-let inputConfirmPasswordUser = document.getElementById('inputConfirmPasswordUser');
+let dropdownMenu2 = document.getElementById('dropdownMenu2');
 
 let btnCreateUsersForm = document.getElementById('btnCreateUsersForm');
 let divSearchUser = document.getElementById('searchUser');
@@ -30,10 +31,12 @@ btnCreateUsersForm.addEventListener('click', showCreateUser);
 async function btnAddUsers(event) {
     event.preventDefault();
 
+    let valueAdmin = dropdownMenu2.innerText == "Si" ? true : false;
+
     let url = `http://localhost:3000/v1/createUsers`;
     await fetch(url, {
             method: 'POST',
-            body: `{"user_id": "${inputIdUser.value}","username": "${inputUsernameUser.value}","password": "${inputPasswordUser.value}","name": "${inputNameUser.value}","lastName": "${inputLastnameUser.value}","email": "${inputEmailUser.value}","profileAdmin": "0"}`,
+            body: `{"user_id": "${inputIdUser.value}","username": "${inputUsernameUser.value}","password": "${inputPasswordUser.value}","name": "${inputNameUser.value}","lastName": "${inputLastnameUser.value}","email": "${inputEmailUser.value}","profileAdmin": "${valueAdmin}"}`,
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${token}`
@@ -49,17 +52,21 @@ async function btnAddUsers(event) {
             });
         })
         .catch(err => console.log(err));
+
+    showCreateUser();
+    btnGetUsers();
 }
 
 async function btnGetUsers() {
     let arrData;
     let is_admin;
+    let tok = localStorage.getItem("token");
     let url = `http://localhost:3000/v1/readUsers`;
     await fetch(url, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${tok}`
             }
         })
         .then((resp) => resp.json())
@@ -124,7 +131,7 @@ async function deleteUsersSelect() {
     for (i = 1; i < elements.length; i++) {
         let user_id = elements[i].id;
         user_id = user_id.slice(6, user_id.length);
-        let url = `http://localhost:3000/v1/deleteCompany`;
+        let url = `http://localhost:3000/v1/deleteUsers`;
 
         if (elements[i].checked) {
             await fetch(url, {
@@ -151,7 +158,7 @@ function normalizeForm() {
     inputEmailUser.value = "";
     inputUsernameUser.value = "";
     inputPasswordUser.value = "";
-    inputConfirmPasswordUser.value = "";
+    dropdownMenu2.value = "Seleccione Perfil Administrador";
 }
 
 function showCreateUser() {
@@ -198,4 +205,14 @@ function updateUser(iconEdit) {
     inputPasswordUser.value = dataToEdit.password;
 }
 
-function updateSite() { /* location.reload(); */ window.location.href = window.location.href; }
+function optClickAdmin(clicked) {
+
+    let answerAdmin = clicked.id;
+
+    if (answerAdmin == "btnAdminTrue") {
+        dropdownMenu2.innerText = "Si"
+    } else if (answerAdmin == "btnAdminFalse") {
+        dropdownMenu2.innerText = "No"
+    }
+
+}

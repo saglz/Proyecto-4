@@ -16,16 +16,20 @@ const createToken = async(req, res, payload) => {
     }
 }
 
-/* const validateToken = async(req, res, next) => {
+const validateToken = async(req, res, next) => {
     try {
-        const token = req.headers.authorization.split(' ')[1];
+        const token = await req.headers.authorization.split(' ')[1];
+        /* console.log('-------------------------------------------TOKEN-----------------------------');
+        console.log(token); */
         const verification = await jwt.verify(token, SECRET);
+        req.token_info = "";
         req.token_info = verification;
         next();
+
     } catch (error) {
         response.error(req, res, "token no válido", 401, error);
     }
-} */
+}
 
 function validateUser(req, res, next) {
     try {
@@ -36,19 +40,6 @@ function validateUser(req, res, next) {
         };
     } catch (error) {
         console.log(error);
-    }
-}
-
-const validateToken = (req, res, next) => {
-    try {
-        const token = req.headers.authorization.split(' ')[1];
-        const verification = jwt.verify(token, SECRET);
-        req.token_info = "";
-        req.token_info = verification;
-        next();
-
-    } catch (error) {
-        response.error(req, res, "token no válido", 401, error);
     }
 }
 

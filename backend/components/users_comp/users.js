@@ -9,8 +9,10 @@ const createUsers = async(req, res) => {
 
     let alreadyExists = await querys.selectDataById(req, res, 'users', 'user_id', 'user_id', user_id);
 
-    if (!!alreadyExists) {
-        response.error(req, res, 'Ya existe un usuario con esa identificación', 200, 'Error ya existe el id[createUsers]');
+    let alreadyExistsUsername = await querys.selectDataByName(req, res, 'users', 'username', 'username', username);
+
+    if (!!alreadyExists || !!alreadyExistsUsername) {
+        response.error(req, res, 'Ya existe un usuario con esa identificación o username', 200, 'Error ya existe el id[createUsers]');
     } else {
         let insert = await querys.insert(req, res, 'users', 'user_id, username, password, name, lastName, email, profileAdmin', `${user_id},'${username}','${password}','${name}','${lastName}','${email}',${profileAdmin}`);
         if (!!insert) {

@@ -1,5 +1,5 @@
 /* ------------------------------------VARIABLES GLOBALES---------------------------------- */
-let token = localStorage.token;
+let token = localStorage.getItem('token');
 
 let addContact = document.getElementById('addContact'); //btn de Registro    C
 let getContact = document.getElementById('btnContacts'); //                     R
@@ -25,6 +25,13 @@ let inputPositionCont = document.getElementById('inputPositionCont');
 let inputChannelCont = document.getElementById('inputChannelCont');
 let inputInterestCont = document.getElementById('inputInterestCont');
 
+/* Paginas */
+let pageSelectContacts = document.getElementById('quantityContact');
+let backContacts = document.getElementById('backContacts');
+let nextContacts = document.getElementById('nextContacts');
+let pagInitContacts = 0;
+let pagFinalContacts = parseInt(pageSelectContacts.value);
+
 /* ------------------------------------EVENTOS LISTENER----------------------------------- */
 
 /* CRUD */
@@ -38,6 +45,8 @@ btnUpdateContact.addEventListener('click', btnEditContact);
 
 btnDropdownCompany.addEventListener('click', btnGetCompaniesOptions);
 inputInterestCont.addEventListener('change', setValueInterest);
+
+pageSelectContacts.addEventListener('change', changeQuantityContacts);
 
 
 /* ------------------------------------FUNCIONES DE CRUD ------------------------- */
@@ -70,27 +79,21 @@ function btnAddContact(event) {
 
 async function btnGetContacts() {
     let arrData;
+    let tok = localStorage.getItem("token");
     let url = `http://localhost:3000/v1/readContacts`;
     await fetch(url, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${tok}`
             }
         })
         .then((resp) => resp.json())
         .then(async function(data) {
             arrData = data.body.readCont;
             arrAux = data.body.readCont;
-            tableContact.innerText = "";
-            for (var index = 0; index < arrData.length; index++) {
 
-                var tr = document.createElement('tr');
-                tr.innerHTML = `<td><div class="form-check"><input class="form-check-input" type="checkbox" onclick="countCheck(this)"  name="checkContacts" id="ckCont${arrData[index].id}"></div></td>
-            <td>${arrData[index].name} ${arrData[index].lastName}<br>${arrData[index].email}</td><td>${arrData[index].country}<br>${arrData[index].region}</td><td>${arrData[index].company}</td><td>${arrData[index].position}</td><td>${arrData[index].channel}</td><td>${arrData[index].interest}%</td><td class="centerContent"><a id="u${arrData[index].id}" onclick="updateContact(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="d${arrData[index].id}" onclick="btnDeleteContact(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
-                tableContact.appendChild(tr);
-            }
-            return arrData;
+            createRowContacts(arrData);
         })
         .catch(err => console.log(err));
 }
@@ -206,17 +209,6 @@ function showUpdateContact() {
     addCompany.classList.toggle('hidden');
 }
 
-/* function searchValue(id) {
-    let dataToEdit;
-    arrAux.forEach(element => {
-
-        if (element.id == id) {
-            dataToEdit = element;
-        }
-    });
-    return dataToEdit;
-} */
-
 function updateContact(iconEdit) {
 
     let id = iconEdit.id;
@@ -267,3 +259,56 @@ function setValueInterest() {
     let spanValueInterest = document.getElementById('spanValueInterest');
     spanValueInterest.innerText = inputInterestCont.value;
 }
+
+function createRowContacts(arrayResult) {
+    /* pagFinalContacts = parseInt(pageSelectContacts.value); */
+
+    if (pagFinalContacts >= arrayResult.length) {
+
+        tableContact.innerText = "";
+        for (var index = pagInitContacts; index < arrayResult.length; index++) {
+
+            var tr = document.createElement('tr');
+            tr.innerHTML = `<td><div class="form-check"><input class="form-check-input" type="checkbox" onclick="countCheck(this)"  name="checkContacts" id="ckCont${arrayResult[index].id}"></div></td>
+        <td>${arrayResult[index].name} ${arrayResult[index].lastName}<br>${arrayResult[index].email}</td><td>${arrayResult[index].country}<br>${arrayResult[index].region}</td><td>${arrayResult[index].company}</td><td>${arrayResult[index].position}</td><td>${arrayResult[index].channel}</td><td>${arrayResult[index].interest}%</td><td class="centerContent"><a id="u${arrayResult[index].id}" onclick="updateContact(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="d${arrayResult[index].id}" onclick="btnDeleteContact(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
+            tableContact.appendChild(tr);
+        }
+
+    } else if (pagFinalContacts < arrayResult.length) {
+
+        tableContact.innerText = "";
+        for (var index = pagInitContacts; index < pagFinalContacts; index++) {
+
+            var tr = document.createElement('tr');
+            tr.innerHTML = `<td><div class="form-check"><input class="form-check-input" type="checkbox" onclick="countCheck(this)"  name="checkContacts" id="ckCont${arrayResult[index].id}"></div></td>
+        <td>${arrayResult[index].name} ${arrayResult[index].lastName}<br>${arrayResult[index].email}</td><td>${arrayResult[index].country}<br>${arrayResult[index].region}</td><td>${arrayResult[index].company}</td><td>${arrayResult[index].position}</td><td>${arrayResult[index].channel}</td><td>${arrayResult[index].interest}%</td><td class="centerContent"><a id="u${arrayResult[index].id}" onclick="updateContact(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="d${arrayResult[index].id}" onclick="btnDeleteContact(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
+            tableContact.appendChild(tr);
+        }
+
+    }
+
+}
+
+function changeQuantityContacts() {
+    pagFinalContacts = parseInt(pageSelectContacts.value);
+    createRowContacts(arrAux);
+}
+
+backContacts.addEventListener('click', () => {
+    validate = pagInitContacts - parseInt(pageSelectContacts.value)
+    if (validate >= 0) {
+        pagInitContacts = pagInitContacts - parseInt(pageSelectContacts.value)
+        pagFinalContacts = pagFinalContacts - parseInt(pageSelectContacts.value)
+        console.log(pagInitContacts);
+        console.log(pagFinalContacts);
+        createRowContacts(arrAux);
+    }
+})
+
+nextContacts.addEventListener('click', () => {
+    if (parseInt(pagFinalContacts) <= arrAux.length) {
+        pagInitContacts = parseInt(pagInitContacts) + parseInt(pageSelectContacts.value);
+        pagFinalContacts = parseInt(pagFinalContacts) + parseInt(pageSelectContacts.value);
+        createRowContacts(arrAux);
+    }
+})

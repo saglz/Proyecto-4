@@ -71,12 +71,13 @@ async function btnAddCompanies(event) {
 
 async function btnGetCompanies() {
     let arrData;
+    let tok = localStorage.getItem("token");
     let url = `http://localhost:3000/v1/readCompany`;
     await fetch(url, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${tok}`
             }
         })
         .then((resp) => resp.json())

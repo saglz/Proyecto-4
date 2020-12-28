@@ -24,7 +24,7 @@ async function validateLogin(event) {
             }
         })
         .then((res) => {
-            res.json().then((data) => {
+            res.json().then(async(data) => {
                 if (res.status == 200) {
                     localStorage.setItem("token", data.body.token);
                     localStorage.setItem("user", data.body.is_admin);

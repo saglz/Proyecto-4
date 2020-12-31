@@ -65,7 +65,7 @@
                             <div id="searchContact" class="col-sm-12 col-md-6">
                                 <div id="userList_filter" class="dataTables_filter">
                                     <label>Search:
-                                        <input type="search" class="form-control form-control-sm" placeholder="Buscar por nombre" aria-controls="userList">
+                                        <input id="inputSearchContacts" type="search" class="form-control form-control-sm" placeholder="Buscar por nombre" aria-controls="userList">
                                     </label>
                                 </div>
                             </div>
@@ -112,7 +112,7 @@
                                 </tbody>
                             </table>
                         </div>
-
+                        <!-- Paginacion -->
                         <div id="pageContact" class="row">
                             <div id="contactsList" class="col-sm-12 col-md-5">
                                 <label>Mostrar
@@ -208,7 +208,7 @@
                             <div id="searchCompany" class="col-sm-12 col-md-6">
                                 <div id="userList_filter" class="dataTables_filter">
                                     <label>Search:
-                                        <input type="search" class="form-control form-control-sm" placeholder="Buscar por nombre" aria-controls="userList">
+                                        <input id="inputSearchCompanies" type="search" class="form-control form-control-sm" placeholder="Buscar por nombre" aria-controls="userList">
                                     </label>
                                 </div>
                             </div>
@@ -253,11 +253,11 @@
                                 </tbody>
                             </table>
                         </div>
-
-                        <div id="pageCompany" class="row">
-                            <div id="companyList" class="col-sm-12 col-md-5">
+                        <!-- Paginacion -->
+                        <div id="pageCompanies" class="row">
+                            <div id="companiesList" class="col-sm-12 col-md-5">
                                 <label>Mostrar
-                                    <select name="companyList" aria-controls="userList" class="custom-select custom-select-sm form-control form-control-sm">
+                                    <select id="quantityCompanies" name="companiesList" aria-controls="userList" class="custom-select custom-select-sm form-control form-control-sm">
                                         <option value="5">5</option>
                                         <option value="10">10</option>
                                         <option value="15">15</option>
@@ -267,9 +267,9 @@
                             <div class="col-sm-12 col-md-7">
                                 <div class="dataTables_paginate paging_simple_numbers" id="userList_paginate">
                                     <ul class="pagination">
-                                        <li class="paginate_button page-item previous disabled" id="userList_previous"><a href="#" aria-controls="userList" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
+                                        <li id="backCompanies" class="paginate_button page-item previous disabled"><a href="#" aria-controls="userList" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
                                         <li class="paginate_button page-item active"><a href="#" aria-controls="userList" data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
-                                        <li class="paginate_button page-item next disabled" id="userList_next"><a href="#" aria-controls="userList" data-dt-idx="2" tabindex="0" class="page-link">Next</a></li>
+                                        <li id="nextCompanies" class="paginate_button page-item next disabled"><a href="#" aria-controls="userList" data-dt-idx="2" tabindex="0" class="page-link">Next</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -333,7 +333,7 @@
                             <div id="searchUser" class="col-6">
                                 <div id="userList_filter" class="dataTables_filter">
                                     <label>Search:
-                                    <input type="search" class="form-control form-control-sm" placeholder="Buscar por nombre" aria-controls="userList">
+                                    <input id="inputSearchUsers" type="search" class="form-control form-control-sm" placeholder="Buscar por nombre" aria-controls="userList">
                                 </label>
                                 </div>
                             </div>
@@ -374,23 +374,23 @@
                                 </tbody>
                             </table>
                         </div>
-                        <!-- PAGINATION -->
-                        <div id="pageUser" class="row">
-                            <div id="companyList" class="col-sm-12 col-md-5">
+                        <!-- Paginacion -->
+                        <div id="pageUsers" class="row">
+                            <div id="usersList" class="col-sm-12 col-md-5">
                                 <label>Mostrar
-                                    <select name="companyList" aria-controls="userList" class="custom-select custom-select-sm form-control form-control-sm">
+                                    <select id="quantityUsers" name="usersList" aria-controls="userList" class="custom-select custom-select-sm form-control form-control-sm">
                                         <option value="5">5</option>
                                         <option value="10">10</option>
                                         <option value="15">15</option>
-                                    </select> Usuarios
+                                    </select> Compañías
                                 </label>
                             </div>
                             <div class="col-sm-12 col-md-7">
                                 <div class="dataTables_paginate paging_simple_numbers" id="userList_paginate">
                                     <ul class="pagination">
-                                        <li class="paginate_button page-item previous disabled" id="userList_previous"><a href="#" aria-controls="userList" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
+                                        <li id="backUsers" class="paginate_button page-item previous disabled"><a href="#" aria-controls="userList" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
                                         <li class="paginate_button page-item active"><a href="#" aria-controls="userList" data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
-                                        <li class="paginate_button page-item next disabled" id="userList_next"><a href="#" aria-controls="userList" data-dt-idx="2" tabindex="0" class="page-link">Next</a></li>
+                                        <li id="nextUsers" class="paginate_button page-item next disabled"><a href="#" aria-controls="userList" data-dt-idx="2" tabindex="0" class="page-link">Next</a></li>
                                     </ul>
                                 </div>
                             </div>

@@ -32,6 +32,9 @@ let nextContacts = document.getElementById('nextContacts');
 let pagInitContacts = 0;
 let pagFinalContacts = parseInt(pageSelectContacts.value);
 
+/* Busqueda */
+let inputSearchContacts = document.getElementById('inputSearchContacts');
+let tableContactList = document.getElementById('contactList');
 /* ------------------------------------EVENTOS LISTENER----------------------------------- */
 
 /* CRUD */
@@ -299,8 +302,6 @@ backContacts.addEventListener('click', () => {
     if (validate >= 0) {
         pagInitContacts = pagInitContacts - parseInt(pageSelectContacts.value)
         pagFinalContacts = pagFinalContacts - parseInt(pageSelectContacts.value)
-        console.log(pagInitContacts);
-        console.log(pagFinalContacts);
         createRowContacts(arrAux);
     }
 })
@@ -312,3 +313,40 @@ nextContacts.addEventListener('click', () => {
         createRowContacts(arrAux);
     }
 })
+
+
+inputSearchContacts.addEventListener('keypress', (event) => {
+    if (event.key == "Enter") {
+        doSearch();
+    }
+});
+
+function doSearch() {
+    const searchText = inputSearchContacts.value.toLowerCase();
+    let total = 0;
+    for (let i = 1; i < tableContactList.rows.length; i++) {
+        if (tableContactList.rows[i].classList.contains("noSearch")) {
+            continue;
+        }
+        let found = false;
+        const cellsOfRow = tableContactList.rows[i].getElementsByTagName('td');
+        for (let j = 0; j < cellsOfRow.length && !found; j++) {
+            const compareWith = cellsOfRow[j].innerHTML.toLowerCase();
+            if (searchText.length == 0 || compareWith.indexOf(searchText) > -1) {
+                found = true;
+                total++;
+            }
+        }
+        if (found) {
+            tableContactList.rows[i].style.display = '';
+        } else {
+            tableContactList.rows[i].style.display = 'none';
+        }
+    }
+    const lastTR = tableContactList.rows[tableContactList.rows.length - 1];
+    const td = lastTR.querySelector("td");
+    lastTR.classList.remove("hide");
+    if (searchText == "") {
+        lastTR.classList.add("hide");
+    }
+}

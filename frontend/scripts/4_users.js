@@ -20,12 +20,25 @@ let dropdownMenu2 = document.getElementById('dropdownMenu2');
 let btnCreateUsersForm = document.getElementById('btnCreateUsersForm');
 let divSearchUser = document.getElementById('searchUser');
 let divPageUser = document.getElementById('pageUser');
+
+/* Paginas */
+let pageSelectUsers = document.getElementById('quantityUsers');
+let backUsers = document.getElementById('backUsers');
+let nextUsers = document.getElementById('nextUsers');
+let pagInitUsers = 0;
+let pagFinalUsers = parseInt(pageSelectUsers.value);
+
+/* Busqueda */
+let inputSearchUsers = document.getElementById('inputSearchUsers');
+let tableUsersList = document.getElementById('userList');
+
 /* ------------------------------------EVENTOS LISTENER----------------------------------- */
 
 btnUsersMenu.addEventListener('click', btnGetUsers);
 btnCreateUser.addEventListener('click', btnAddUsers);
 btnCreateUsersForm.addEventListener('click', showCreateUser);
 
+pageSelectUsers.addEventListener('change', changeQuantityUsers);
 /* ------------------------------------FUNCIONES DE CRUD ------------------------- */
 
 async function btnAddUsers(event) {
@@ -59,7 +72,6 @@ async function btnAddUsers(event) {
 
 async function btnGetUsers() {
     let arrData;
-    let is_admin;
     let tok = localStorage.getItem("token");
     let url = `http://localhost:3000/v1/readUsers`;
     await fetch(url, {
@@ -74,16 +86,8 @@ async function btnGetUsers() {
 
             arrData = data.body.readUsers;
             arrAux = data.body.readUsers;
-            tableUsers.innerText = "";
-            for (var index = 0; index < arrData.length; index++) {
-                is_admin = (arrData[index].profileAdmin == 1) ? true : false;
-                var tr = document.createElement('tr');
-                tr.innerHTML = `<td><div class="form-check"><input class="form-check-input" type="checkbox" onclick="countCheck(this)" id="ckCont${arrData[index].user_id}" name="checkUsers"></div></td>
-                <td>${arrData[index].user_id}</td><td>${arrData[index].name}</td><td>${arrData[index].lastName}</td><td>${arrData[index].email}</td><td>${is_admin}</td><td class="centerContent"><a id="updUser${arrData[index].user_id}" onclick="updateUser(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="delUser${arrData[index].user_id}" onclick="btnDeleteUser(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
-                tableUsers.appendChild(tr);
-            }
-            return arrData;
 
+            createRowUsers(arrData);
 
         })
         .catch(err => console.log(err));
@@ -215,4 +219,95 @@ function optClickAdmin(clicked) {
         dropdownMenu2.innerText = "No"
     }
 
+}
+
+function createRowUsers(arrayResult) {
+    /* pagFinalContacts = parseInt(pageSelectContacts.value); */
+
+    if (pagFinalUsers >= arrayResult.length) {
+
+        tableUsers.innerText = "";
+        for (var index = pagInitUsers; index < arrayResult.length; index++) {
+
+            let is_admin = (arrayResult[index].profileAdmin == 1) ? true : false;
+            var tr = document.createElement('tr');
+            tr.innerHTML = `<td><div class="form-check"><input class="form-check-input" type="checkbox" onclick="countCheck(this)" id="ckCont${arrayResult[index].user_id}" name="checkUsers"></div></td>
+                <td>${arrayResult[index].user_id}</td><td>${arrayResult[index].name}</td><td>${arrayResult[index].lastName}</td><td>${arrayResult[index].email}</td><td>${is_admin}</td><td class="centerContent"><a id="updUser${arrayResult[index].user_id}" onclick="updateUser(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="delUser${arrayResult[index].user_id}" onclick="btnDeleteUser(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
+            tableUsers.appendChild(tr);
+        }
+
+    } else if (pagFinalUsers < arrayResult.length) {
+
+        tableUsers.innerText = "";
+        for (var index = pagInitUsers; index < pagFinalUsers; index++) {
+
+            let is_admin = (arrayResult[index].profileAdmin == 1) ? true : false;
+            var tr = document.createElement('tr');
+            tr.innerHTML = `<td><div class="form-check"><input class="form-check-input" type="checkbox" onclick="countCheck(this)" id="ckCont${arrayResult[index].user_id}" name="checkUsers"></div></td>
+                <td>${arrayResult[index].user_id}</td><td>${arrayResult[index].name}</td><td>${arrayResult[index].lastName}</td><td>${arrayResult[index].email}</td><td>${is_admin}</td><td class="centerContent"><a id="updUser${arrayResult[index].user_id}" onclick="updateUser(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="delUser${arrayResult[index].user_id}" onclick="btnDeleteUser(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
+            tableUsers.appendChild(tr);
+        }
+
+    }
+
+}
+
+function changeQuantityUsers() {
+    pagFinalUsers = parseInt(pageSelectUsers.value);
+    createRowUsers(arrAux);
+}
+
+backUsers.addEventListener('click', () => {
+    validate = pagInitUsers - parseInt(pageSelectUsers.value)
+    if (validate >= 0) {
+        pagInitUsers = pagInitUsers - parseInt(pageSelectUsers.value)
+        pagFinalUsers = pagFinalUsers - parseInt(pageSelectUsers.value)
+        createRowUsers(arrAux);
+    }
+})
+
+nextUsers.addEventListener('click', () => {
+    if (parseInt(pagFinalUsers) <= arrAux.length) {
+        pagInitUsers = parseInt(pagInitUsers) + parseInt(pageSelectUsers.value);
+        pagFinalUsers = parseInt(pagFinalUsers) + parseInt(pageSelectUsers.value);
+        createRowUsers(arrAux);
+    }
+})
+
+
+/* Busqueda */
+inputSearchUsers.addEventListener('keypress', (event) => {
+    if (event.key == "Enter") {
+        doSearchUsers();
+    }
+});
+
+function doSearchUsers() {
+    const searchText = inputSearchUsers.value.toLowerCase();
+    let total = 0;
+    for (let i = 1; i < tableUsersList.rows.length; i++) {
+        if (tableUsersList.rows[i].classList.contains("noSearch")) {
+            continue;
+        }
+        let found = false;
+        const cellsOfRow = tableUsersList.rows[i].getElementsByTagName('td');
+        for (let j = 0; j < cellsOfRow.length && !found; j++) {
+            const compareWith = cellsOfRow[j].innerHTML.toLowerCase();
+            if (searchText.length == 0 || compareWith.indexOf(searchText) > -1) {
+                found = true;
+                total++;
+            }
+        }
+        if (found) {
+            tableUsersList.rows[i].style.display = '';
+        } else {
+            tableUsersList.rows[i].style.display = 'none';
+        }
+    }
+    const lastTR = tableUsersList.rows[tableUsersList.rows.length - 1];
+    const td = lastTR.querySelector("td");
+    lastTR.classList.remove("hide");
+    if (searchText == "") {
+        lastTR.classList.add("hide");
+    }
 }

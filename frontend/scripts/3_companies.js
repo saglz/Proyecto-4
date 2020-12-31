@@ -26,7 +26,18 @@ inputNit.value = "";
 inputName.value = "";
 inputPhone.value = "";
 inputEmail.value = "";
-inputAddress
+inputAddress.value = "";
+
+/* Paginas */
+let pageSelectCompanies = document.getElementById('quantityCompanies');
+let backCompanies = document.getElementById('backCompanies');
+let nextCompanies = document.getElementById('nextCompanies');
+let pagInitCompanies = 0;
+let pagFinalCompanies = parseInt(pageSelectCompanies.value);
+
+/* Busqueda */
+let inputSearchCompanies = document.getElementById('inputSearchCompanies');
+let tableCompaniesList = document.getElementById('companiesList');
 
 /* ------------------------------------EVENTOS LISTENER----------------------------------- */
 
@@ -39,6 +50,7 @@ deleteCompany.addEventListener('click', btnDeleteCompany); */
 btnCreateCompany.addEventListener('click', showCreateCompany);
 btnUpdateCompany.addEventListener('click', btnEditCompany);
 
+pageSelectCompanies.addEventListener('change', changeQuantityCompanies);
 
 /* ------------------------------------FUNCIONES DE CRUD ------------------------- */
 
@@ -84,15 +96,9 @@ async function btnGetCompanies() {
         .then(async function(data) {
             arrData = data.body.readComp;
             arrAux = data.body.readComp;
-            tableCompanies.innerText = "";
-            for (var index = 0; index < arrData.length; index++) {
 
-                var tr = document.createElement('tr');
-                tr.innerHTML = `<td><div class="form-check"><input class="form-check-input" onclick="countCheck(this)" type="checkbox" value="" id="ckCont${arrData[index].nit}" name="check"></div></td>
-                <td>${arrData[index].nit}</td><td>${arrData[index].name}</td><td>${arrData[index].phone}</td><td>${arrData[index].email}</td><td>${arrData[index].address}</td><td>${arrData[index].city}</td><td class="centerContent"><a id="u${arrData[index].nit}" onclick="updateCompany(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="d${arrData[index].nit}" onclick="btnDeleteCompany(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
-                tableCompanies.appendChild(tr);
-            }
-            return arrData;
+            createRowCompanies(arrData);
+
         })
         .catch(err => console.log(err));
 
@@ -222,4 +228,92 @@ function normalizeFormCompany() {
     inputPhone.value = "";
     inputEmail.value = "";
     inputAddress.value = "";
+}
+
+function createRowCompanies(arrayResult) {
+    /* pagFinalContacts = parseInt(pageSelectContacts.value); */
+
+    if (pagFinalCompanies >= arrayResult.length) {
+
+        tableCompanies.innerText = "";
+        for (var index = pagInitCompanies; index < arrayResult.length; index++) {
+
+            var tr = document.createElement('tr');
+            tr.innerHTML = `<td><div class="form-check"><input class="form-check-input" onclick="countCheck(this)" type="checkbox" value="" id="ckCont${arrayResult[index].nit}" name="check"></div></td>
+                <td>${arrayResult[index].nit}</td><td>${arrayResult[index].name}</td><td>${arrayResult[index].phone}</td><td>${arrayResult[index].email}</td><td>${arrayResult[index].address}</td><td>${arrayResult[index].city}</td><td class="centerContent"><a id="u${arrayResult[index].nit}" onclick="updateCompany(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="d${arrayResult[index].nit}" onclick="btnDeleteCompany(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
+            tableCompanies.appendChild(tr);
+        }
+
+    } else if (pagFinalCompanies < arrayResult.length) {
+
+        tableCompanies.innerText = "";
+        for (var index = pagInitCompanies; index < pagFinalCompanies; index++) {
+
+            var tr = document.createElement('tr');
+            tr.innerHTML = `<td><div class="form-check"><input class="form-check-input" onclick="countCheck(this)" type="checkbox" value="" id="ckCont${arrayResult[index].nit}" name="check"></div></td>
+                <td>${arrayResult[index].nit}</td><td>${arrayResult[index].name}</td><td>${arrayResult[index].phone}</td><td>${arrayResult[index].email}</td><td>${arrayResult[index].address}</td><td>${arrayResult[index].city}</td><td class="centerContent"><a id="u${arrayResult[index].nit}" onclick="updateCompany(this)" href="#" title="Modificar"><i class="fas fa-edit"></i></a> | <a id="d${arrayResult[index].nit}" onclick="btnDeleteCompany(this)" href="#" title="Eliminar"><i class="fas fa-user-times"></i></a></td>`
+            tableCompanies.appendChild(tr);
+        }
+
+    }
+
+}
+
+function changeQuantityCompanies() {
+    pagFinalCompanies = parseInt(pageSelectCompanies.value);
+    createRowCompanies(arrAux);
+}
+
+backCompanies.addEventListener('click', () => {
+    validate = pagInitCompanies - parseInt(pageSelectCompanies.value)
+    if (validate >= 0) {
+        pagInitCompanies = pagInitCompanies - parseInt(pageSelectCompanies.value)
+        pagFinalCompanies = pagFinalCompanies - parseInt(pageSelectCompanies.value)
+        createRowCompanies(arrAux);
+    }
+})
+
+nextCompanies.addEventListener('click', () => {
+    if (parseInt(pagFinalCompanies) <= arrAux.length) {
+        pagInitCompanies = parseInt(pagInitCompanies) + parseInt(pageSelectCompanies.value);
+        pagFinalCompanies = parseInt(pagFinalCompanies) + parseInt(pageSelectCompanies.value);
+        createRowCompanies(arrAux);
+    }
+})
+
+/* Busqueda */
+inputSearchCompanies.addEventListener('keypress', (event) => {
+    if (event.key == "Enter") {
+        doSearchComp();
+    }
+});
+
+function doSearchComp() {
+    const searchText = inputSearchCompanies.value.toLowerCase();
+    let total = 0;
+    for (let i = 1; i < tableCompaniesList.rows.length; i++) {
+        if (tableCompaniesList.rows[i].classList.contains("noSearch")) {
+            continue;
+        }
+        let found = false;
+        const cellsOfRow = tableCompaniesList.rows[i].getElementsByTagName('td');
+        for (let j = 0; j < cellsOfRow.length && !found; j++) {
+            const compareWith = cellsOfRow[j].innerHTML.toLowerCase();
+            if (searchText.length == 0 || compareWith.indexOf(searchText) > -1) {
+                found = true;
+                total++;
+            }
+        }
+        if (found) {
+            tableCompaniesList.rows[i].style.display = '';
+        } else {
+            tableCompaniesList.rows[i].style.display = 'none';
+        }
+    }
+    const lastTR = tableCompaniesList.rows[tableCompaniesList.rows.length - 1];
+    const td = lastTR.querySelector("td");
+    lastTR.classList.remove("hide");
+    if (searchText == "") {
+        lastTR.classList.add("hide");
+    }
 }

@@ -234,6 +234,22 @@ h6 {
     position: relative;
 }
 
+.bg-fullsize {
+    width: 100%;
+}
+
+.bg-color-h3 {
+    color: #535353;
+}
+
+.bg-color-h4 {
+    color: #a5a5a5;
+}
+
+.bg-scroll {
+    overflow: scroll;
+}
+
 
 /* ==========================================================================
    #SPACING

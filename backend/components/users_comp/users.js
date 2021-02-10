@@ -26,7 +26,7 @@ const createUsers = async(req, res) => {
 /* ---------------------------------------------READ CONTACTS -----------------------------------------------------*/
 const readUsers = async(req, res) => {
 
-    let readUsers = await querys.selectData(req, res, 'users', 'user_id, name, lastName, email, profileAdmin');
+    let readUsers = await querys.selectData(req, res, 'users', 'username, password, user_id, name, lastName, email, profileAdmin');
 
     if (!!readUsers) {
         response.success(req, res, { readUsers }, 200);

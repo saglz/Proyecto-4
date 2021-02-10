@@ -144,6 +144,16 @@ const createCities = async(req, res) => {
     }
 };
 /* ---------------------------------------------READ CITIES -----------------------------------------------------*/
+const readAllCities = async(req, res) => {
+    const paramsId = req.params.id;
+    let readAllCitys = await querys.selectData(req, res, 'cities', 'cities_id, name');
+
+    if (!!readAllCitys) {
+        response.success(req, res, { readAllCitys }, 200);
+    } else {
+        response.error(req, res, 'Error leyendo los contactos', 400, 'Error leyendo contactos[getContacts]');
+    }
+};
 const readCities = async(req, res) => {
     const paramsId = req.params.id;
     let readCont = await querys.selectDataById(req, res, 'cities AS ct INNER JOIN countries As c ON ct.countries_id = c.countries_id', 'ct.cities_id, ct.name', 'ct.countries_id', paramsId);
@@ -200,6 +210,7 @@ module.exports = {
     deleteCountries,
     /* cities */
     createCities,
+    readAllCities,
     readCities,
     updateCities,
     deleteCities

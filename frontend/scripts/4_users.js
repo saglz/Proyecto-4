@@ -5,6 +5,7 @@ let divGetUsers = document.getElementById('divGetUsers');
 let btnUsersMenu = document.getElementById('btnUsers');
 let tableUsers = document.getElementById('tableUsers'); //BODY DE LA TABLA
 let btnCreateUser = document.getElementById('btnCreateUser');
+let btnUpdateUser = document.getElementById('btnUpdateUser');
 
 /* Campos formulario */
 let inputIdUser = document.getElementById('inputIdUser');
@@ -16,10 +17,11 @@ let btnAdminFalse = document.getElementById('btnAdminFalse');
 let inputUsernameUser = document.getElementById('inputUsernameUser');
 let inputPasswordUser = document.getElementById('inputPasswordUser');
 let dropdownMenu2 = document.getElementById('dropdownMenu2');
+let pagUsers = document.getElementById('pagUsers');
 
 let btnCreateUsersForm = document.getElementById('btnCreateUsersForm');
 let divSearchUser = document.getElementById('searchUser');
-let divPageUser = document.getElementById('pageUser');
+let divPageUser = document.getElementById('pageUsers');
 
 /* Paginas */
 let pageSelectUsers = document.getElementById('quantityUsers');
@@ -36,6 +38,7 @@ let tableUsersList = document.getElementById('userList');
 
 btnUsersMenu.addEventListener('click', btnGetUsers);
 btnCreateUser.addEventListener('click', btnAddUsers);
+btnUpdateUser.addEventListener('click', btnEditUsers);
 btnCreateUsersForm.addEventListener('click', showCreateUser);
 
 pageSelectUsers.addEventListener('change', changeQuantityUsers);
@@ -60,6 +63,7 @@ async function btnAddUsers(event) {
                 if (res.status == 201) {
                     alert(data.body);
                 } else {
+                    /* btnEditUsers(); */
                     alert(data.error);
                 }
             });
@@ -94,20 +98,26 @@ async function btnGetUsers() {
 
 }
 
-function btnEditUsers() {
+function btnEditUsers(event) {
+    event.preventDefault();
+    let tok = localStorage.getItem("token");
+
+    let valueAdmin = dropdownMenu2.innerText == "Si" ? true : false;
 
     let url = `http://localhost:3000/v1/updateUsers`;
     fetch(url, {
             method: 'PUT',
-            body: `{"user_id": "${inputIdUser.value}","username": "${inputUsernameUser.value}","password": "${inputPasswordUser.value}","name": "${inputNameUser.value}","lastName": "${inputLastnameUser.value}","email": "${inputEmailUser.value}","profileAdmin": "0}`,
+            body: `{"user_id": "${inputIdUser.value}","username": "${inputUsernameUser.value}","password": "${inputPasswordUser.value}","name": "${inputNameUser.value}","lastName": "${inputLastnameUser.value}","email": "${inputEmailUser.value}","profileAdmin": "${valueAdmin}"}`,
             headers: {
                 "Content-Type": "application/json",
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${tok}`
             }
         })
         .then((resp) => resp.json())
-        .then(res => console.log(res))
+        .then(res => res.body !== "" ? alert(res.body) : alert(res.error))
         .catch(err => console.log(err));
+
+    btnGetUsers();
 }
 
 async function btnDeleteUser(iconDelete) {
@@ -163,6 +173,15 @@ function normalizeForm() {
     inputUsernameUser.value = "";
     inputPasswordUser.value = "";
     dropdownMenu2.value = "Seleccione Perfil Administrador";
+
+    btnCreateUser.classList.remove('hidden');
+    btnCreateUser.classList.add('btn1');
+    btnCreateUser.classList.add('btn--pill');
+    btnCreateUser.classList.add('btn--green');
+    btnUpdateUser.classList.add('hidden');
+    btnUpdateUser.classList.remove('btn1');
+    btnUpdateUser.classList.remove('btn--pill');
+    btnUpdateUser.classList.remove('btn--blue');
 }
 
 function showCreateUser() {
@@ -176,6 +195,9 @@ function showCreateUser() {
     divSearchUser.classList.toggle('hidden');
     divPageUser.classList.toggle('row');
     divPageUser.classList.toggle('hidden');
+    inputIdUser.disabled = false;
+    btnCreateUser.innerText = "Registrar";
+
     normalizeForm();
 
     btnCreateUsersForm.innerText = btnCreateUsersForm.innerText == "Crear nuevo usuario" ? btnCreateUsersForm.innerText = "Lista de usuarios" : btnCreateUsersForm.innerText = "Crear nuevo usuario";
@@ -200,6 +222,15 @@ function updateUser(iconEdit) {
 
     showCreateUser();
 
+    btnCreateUser.classList.remove('btn1');
+    btnCreateUser.classList.remove('btn--pill');
+    btnCreateUser.classList.remove('btn--green');
+    btnCreateUser.classList.add('hidden');
+    btnUpdateUser.classList.remove('hidden');
+    btnUpdateUser.classList.add('btn1');
+    btnUpdateUser.classList.add('btn--pill');
+    btnUpdateUser.classList.add('btn--blue');
+
     inputIdUser.value = dataToEdit.user_id;
     inputIdUser.disabled = true;
     inputNameUser.value = dataToEdit.name;
@@ -222,7 +253,6 @@ function optClickAdmin(clicked) {
 }
 
 function createRowUsers(arrayResult) {
-    /* pagFinalContacts = parseInt(pageSelectContacts.value); */
 
     if (pagFinalUsers >= arrayResult.length) {
 
@@ -260,6 +290,10 @@ function changeQuantityUsers() {
 backUsers.addEventListener('click', () => {
     validate = pagInitUsers - parseInt(pageSelectUsers.value)
     if (validate >= 0) {
+        if (pagUsers.innerText >= 1) {
+            let valInit = pagUsers.innerText;
+            pagUsers.innerText = --valInit;
+        }
         pagInitUsers = pagInitUsers - parseInt(pageSelectUsers.value)
         pagFinalUsers = pagFinalUsers - parseInt(pageSelectUsers.value)
         createRowUsers(arrAux);
@@ -268,6 +302,10 @@ backUsers.addEventListener('click', () => {
 
 nextUsers.addEventListener('click', () => {
     if (parseInt(pagFinalUsers) <= arrAux.length) {
+        if (pagUsers.innerText >= 1) {
+            let valInit = pagUsers.innerText;
+            pagUsers.innerText = ++valInit;
+        }
         pagInitUsers = parseInt(pagInitUsers) + parseInt(pageSelectUsers.value);
         pagFinalUsers = parseInt(pagFinalUsers) + parseInt(pageSelectUsers.value);
         createRowUsers(arrAux);

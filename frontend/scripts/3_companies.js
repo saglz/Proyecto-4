@@ -9,10 +9,12 @@ let deleteCompany = document.getElementById('deleteCompany'); //             D *
 let searchCompany = document.getElementById('searchCompany');
 let tableCompanies = document.getElementById('tableCompanies'); //BODY DE LA TABLA
 let tableCompany = document.getElementById('tableCompany');
-let pageCompany = document.getElementById('pageCompany');
+let pageCompany = document.getElementById('pageCompanies');
 let btnCreateCompany = document.getElementById('btnCreateCompany');
 let divCreateCompany = document.getElementById('divCreateCompany');
 let btnUpdateCompany = document.getElementById('btnUpdateCompany');
+let inputCity = document.getElementById('inputCity');
+let pagCompanies = document.getElementById('pagCompanies');
 
 
 /* Campos formulario */
@@ -51,6 +53,7 @@ btnCreateCompany.addEventListener('click', showCreateCompany);
 btnUpdateCompany.addEventListener('click', btnEditCompany);
 
 pageSelectCompanies.addEventListener('change', changeQuantityCompanies);
+inputCity.addEventListener('click', btnGetCitiesOptionsComp);
 
 /* ------------------------------------FUNCIONES DE CRUD ------------------------- */
 
@@ -60,7 +63,7 @@ async function btnAddCompanies(event) {
     let url = `http://localhost:3000/v1/createCompany`;
     await fetch(url, {
             method: 'POST',
-            body: `{"nit":"${inputNit.value}","name":"${inputName.value}","phone":"${inputPhone.value}","email":"${inputEmail.value}","address":"${inputAddress.value}","cities_id":"18"}`,
+            body: `{"nit":"${inputNit.value}","name":"${inputName.value}","phone":"${inputPhone.value}","email":"${inputEmail.value}","address":"${inputAddress.value}","cities_id":"${dpdId}"}`,
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${token}`
@@ -104,20 +107,26 @@ async function btnGetCompanies() {
 
 }
 
-function btnEditCompany() {
+function btnEditCompany(event) {
+    event.preventDefault();
 
-    let url = `http://localhost:3000/v1/updateCompany`;
-    fetch(url, {
-            method: 'PUT',
-            body: `{"nit":"${inputNit.value}","name":"${inputName.value}","phone":"${inputPhone.value}","email":"${inputEmail.value}","address":"${inputAddress.value}","cities_id":"17"}`,
-            headers: {
-                "Content-Type": "application/json",
-                'Authorization': `Bearer ${token}`
-            }
-        })
-        .then((resp) => resp.json())
-        .then(res => console.log(res))
-        .catch(err => console.log(err));
+    let tok = localStorage.getItem("token");
+    if (inputCity.innerText !== "Ciudad") {
+        let url = `http://localhost:3000/v1/updateCompany`;
+        fetch(url, {
+                method: 'PUT',
+                body: `{"nit":"${inputNit.value}","name":"${inputName.value}","phone":"${inputPhone.value}","email":"${inputEmail.value}","address":"${inputAddress.value}","cities_id":"${dpdId}"}`,
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${tok}`
+                }
+            })
+            .then((resp) => resp.json())
+            .then(res => res.body !== "" ? alert(res.body) : alert(res.error))
+            .catch(err => console.log(err));
+    } else {
+        alert('Seleccione una Ciudad');
+    }
 }
 
 async function btnDeleteCompany(iconDelete) {
@@ -163,6 +172,28 @@ async function deleteCompanySelect() {
         btnGetCompanies();
     }
 }
+
+async function btnGetCitiesOptionsComp() {
+    let tok = localStorage.getItem("token");
+    let arrData;
+    let url = `http://localhost:3000/v1/readAllCities`;
+    await fetch(url, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${tok}`
+            }
+        })
+        .then((resp) => resp.json())
+        .then((data) => {
+            arrData = data.body.readAllCitys;
+            createOptionsDropdown(arrData);
+
+        })
+        .catch(err => console.log(err));
+
+
+}
 /* ------------------------------------FUNCIONES DE NORMALIZACIÓN------------------------- */
 
 function showCreateCompany() {
@@ -181,6 +212,8 @@ function showCreateCompany() {
     btnUpdateCompany.classList.add('hidden');
     addCompany.classList.add('btn1', 'btn--pill', 'btn--green');
     addCompany.classList.remove('hidden');
+
+    inputCity.innerText = "Ciudad";
 
     btnGetCompanies();
 }
@@ -267,6 +300,10 @@ function changeQuantityCompanies() {
 backCompanies.addEventListener('click', () => {
     validate = pagInitCompanies - parseInt(pageSelectCompanies.value)
     if (validate >= 0) {
+        if (pagCompanies.innerText >= 1) {
+            let valInit = pagCompanies.innerText;
+            pagCompanies.innerText = --valInit;
+        }
         pagInitCompanies = pagInitCompanies - parseInt(pageSelectCompanies.value)
         pagFinalCompanies = pagFinalCompanies - parseInt(pageSelectCompanies.value)
         createRowCompanies(arrAux);
@@ -275,6 +312,10 @@ backCompanies.addEventListener('click', () => {
 
 nextCompanies.addEventListener('click', () => {
     if (parseInt(pagFinalCompanies) <= arrAux.length) {
+        if (pagCompanies.innerText >= 1) {
+            let valInit = pagCompanies.innerText;
+            pagCompanies.innerText = ++valInit;
+        }
         pagInitCompanies = parseInt(pagInitCompanies) + parseInt(pageSelectCompanies.value);
         pagFinalCompanies = parseInt(pagFinalCompanies) + parseInt(pageSelectCompanies.value);
         createRowCompanies(arrAux);

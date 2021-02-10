@@ -14,9 +14,13 @@ let btnCreateContact = document.getElementById('btnCreateContact');
 let divCreateContact = document.getElementById('divCreateContact');
 let btnUpdateContact = document.getElementById('btnUpdateContact');
 let btnExportContact = document.getElementById('btnExportContact');
+let pagContacts = document.getElementById('pagContacts');
 
-let btnDropdownCompany = document.getElementById('dropdownCompany')
-    /* Campos formulario */
+let dropdownRegion = document.getElementById('dropdownRegion');
+let dropdownCountry = document.getElementById('dropdownCountry');
+let btnDropdownCompany = document.getElementById('dropdownCompany');
+
+/* Campos formulario */
 let inputIdCont = document.getElementById('inputIdCont');
 let inputNameCont = document.getElementById('inputNameCont');
 let inputlastName = document.getElementById('inputlastName');
@@ -46,6 +50,8 @@ deleteContact.addEventListener('click', btnDeleteContact); */
 btnCreateContact.addEventListener('click', showCreateContact);
 btnUpdateContact.addEventListener('click', btnEditContact);
 
+dropdownCountry.addEventListener('click', btnGetCountryOptions);
+dropdownRegion.addEventListener('click', btnGetRegionOptions);
 btnDropdownCompany.addEventListener('click', btnGetCompaniesOptions);
 inputInterestCont.addEventListener('change', setValueInterest);
 
@@ -97,25 +103,6 @@ async function btnGetContacts() {
             arrAux = data.body.readCont;
 
             createRowContacts(arrData);
-        })
-        .catch(err => console.log(err));
-}
-
-async function btnGetCompaniesOptions() {
-    let arrData;
-    let url = `http://localhost:3000/v1/readCompany`;
-    await fetch(url, {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json",
-                'Authorization': `Bearer ${token}`
-            }
-        })
-        .then((resp) => resp.json())
-        .then((data) => {
-            arrData = data.body.readComp;
-            createOptionsDropdown(arrData);
-
         })
         .catch(err => console.log(err));
 }
@@ -183,6 +170,63 @@ async function deleteContactSelect() {
     btnGetContacts();
 }
 
+async function btnGetCompaniesOptions() {
+    let arrData;
+    let url = `http://localhost:3000/v1/readCompany`;
+    await fetch(url, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then((resp) => resp.json())
+        .then((data) => {
+            arrData = data.body.readComp;
+            createOptionsDropdown(arrData);
+
+        })
+        .catch(err => console.log(err));
+}
+async function btnGetRegionOptions() {
+    let arrData;
+    let url = `http://localhost:3000/v1/readRegion`;
+    await fetch(url, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then((resp) => resp.json())
+        .then((data) => {
+            arrData = data.body.readRegionQuery;
+            createOptionsDropdown(arrData);
+
+        })
+        .catch(err => console.log(err));
+}
+async function btnGetCountryOptions() {
+    let arrData;
+    if (dpdId) {
+        let url = `http://localhost:3000/v1/readCountries/${dpdId}`;
+        await fetch(url, {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then((resp) => resp.json())
+            .then((data) => {
+                arrData = data.body.readCountriesQuery;
+                createOptionsDropdown(arrData);
+
+            })
+            .catch(err => console.log(err));
+    }
+
+}
 /* ------------------------------------FUNCIONES DE NORMALIZACIÓN------------------------- */
 
 function showCreateContact() {
@@ -232,8 +276,8 @@ function updateContact(iconEdit) {
     inputEmailCont.value = dataToEdit.email;
     btnDropdownCompany.innerText = dataToEdit.company;
     inputPositionCont.value = dataToEdit.position;
-    inputCountry.value = dataToEdit.country;
-    inputRegion.value = dataToEdit.region;
+    /* inputCountry.value = dataToEdit.country; */
+    /* inputRegion.value = dataToEdit.region; */
     inputChannelCont.value = dataToEdit.channel;
     inputInterestCont.value = dataToEdit.interest;
     spanValueInterest.innerText = dataToEdit.interest;
@@ -300,6 +344,10 @@ function changeQuantityContacts() {
 backContacts.addEventListener('click', () => {
     validate = pagInitContacts - parseInt(pageSelectContacts.value)
     if (validate >= 0) {
+        if (pagContacts.innerText >= 1) {
+            let valInit = pagContacts.innerText;
+            pagContacts.innerText = --valInit;
+        }
         pagInitContacts = pagInitContacts - parseInt(pageSelectContacts.value)
         pagFinalContacts = pagFinalContacts - parseInt(pageSelectContacts.value)
         createRowContacts(arrAux);
@@ -308,6 +356,10 @@ backContacts.addEventListener('click', () => {
 
 nextContacts.addEventListener('click', () => {
     if (parseInt(pagFinalContacts) <= arrAux.length) {
+        if (pagContacts.innerText >= 1) {
+            let valInit = pagContacts.innerText;
+            pagContacts.innerText = ++valInit;
+        }
         pagInitContacts = parseInt(pagInitContacts) + parseInt(pageSelectContacts.value);
         pagFinalContacts = parseInt(pagFinalContacts) + parseInt(pageSelectContacts.value);
         createRowContacts(arrAux);

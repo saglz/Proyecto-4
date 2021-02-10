@@ -150,25 +150,49 @@ function selectAll(ckbox) {
 }
 
 let divOptionsCompany = document.getElementById('dpdOptionsCompany');
-let firtsOptions = 0;
+let dpdCitiesCompanies = document.getElementById('dpdCitiesCompanies');
+let dpdOptionsRegion = document.getElementById('dpdOptionsRegion');
+let dpdOptionsCountry = document.getElementById('dpdOptionsCountry');
 
-function createOptionsDropdown(arr) {
+async function createOptionsDropdown(arr) {
 
-    if (firtsOptions == 0) {
-        arr.forEach(element => {
-            let name = element.name;
-            name = name.slice(0, 3);
-            let createTagA = document.createElement('a');
-            createTagA.classList.add('dropdown-item');
-            createTagA.classList.add('pointer');
+    divOptionsCompany.innerHTML = "";
+    dpdCitiesCompanies.innerHTML = "";
+    dpdOptionsRegion.innerHTML = "";
+    dpdOptionsCountry.innerHTML = "";
+    await arr.forEach(element => {
+        let name = element.name;
+        name = name.slice(0, 3);
+        let createTagA = document.createElement('a');
+        /* if (createTagA.innerText == element.name) console.log('vea'); */
+        createTagA.classList.add('dropdown-item');
+        createTagA.classList.add('pointer');
+        createTagA.setAttribute('name', `dpdOptions`);
+        createTagA.innerText = element.name;
+        createTagA.setAttribute('onclick', 'optClick(this)');
+
+        if (arr[0].nit) {
             createTagA.setAttribute('id', `btn${name}${element.id}`);
-            createTagA.setAttribute('name', `dpdOptions`);
-            createTagA.innerText = element.name;
-            createTagA.setAttribute('onclick', 'optClick(this)');
+            createTagA.setAttribute('name', `dpdComp`);
             divOptionsCompany.appendChild(createTagA);
-        });
-        firtsOptions = 1;
-    }
+        }
+        if (arr[0].cities_id) {
+            createTagA.setAttribute('id', `btn${name}${element.cities_id}`);
+            createTagA.setAttribute('name', `dpdCity`);
+            dpdCitiesCompanies.appendChild(createTagA);
+        }
+        if (arr[0].region_id) {
+            createTagA.setAttribute('id', `btn${name}${element.region_id}`);
+            createTagA.setAttribute('name', `dpdReg`);
+            dpdOptionsRegion.appendChild(createTagA);
+        }
+        if (arr[0].countries_id) {
+            createTagA.setAttribute('id', `btn${name}${element.countries_id}`);
+            createTagA.setAttribute('name', `dpdCou`);
+            dpdOptionsCountry.appendChild(createTagA);
+        }
+
+    });
 
 }
 let dpdId;
@@ -177,5 +201,9 @@ function optClick(clicked) {
 
     let btnClicked = clicked.id;
     dpdId = btnClicked.slice(6, btnClicked.length);
-    btnDropdownCompany.innerText = clicked.innerText;
+    if (clicked.name == "dpdComp") btnDropdownCompany.innerText = clicked.innerText;
+    if (clicked.name == "dpdCity") inputCity.innerText = clicked.innerText;
+    if (clicked.name == "dpdReg") dropdownRegion.innerText = clicked.innerText;
+    if (clicked.name == "dpdCou") dropdownCountry.innerText = clicked.innerText;
+
 }
